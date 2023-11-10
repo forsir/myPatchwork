@@ -1,1 +1,1 @@
-npx tailwindcss -i ./src/input.css -o ./src/index.css --watch
+npx tailwindcss -i ./src/input.css -o ./public/index.css --watch

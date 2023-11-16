@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { Action } from './reducer';
-import { Item } from './types';
+import { Action } from '../reducer/reducer';
+import { Item } from '../reducer/types';
 
 export type partProps = {
     item: Item;

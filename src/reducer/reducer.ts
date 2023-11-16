@@ -1,9 +1,9 @@
-import { Cells, Inventory, Item, Point } from './types';
+import { Game, Item, Point } from './types';
 
-export const initial: Inventory = {
-    items: [],
-    cells: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((y) => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((x) => 'none')),
-    dragging: undefined
+export const initial: Game = {
+    // items: [],
+    // cells: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((y) => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((x) => 'none')),
+    // dragging: undefined
 };
 
 export type Action =
@@ -14,41 +14,41 @@ export type Action =
     | { type: 'DRAG_ENDED'; payload: { item: Item } }
     | { type: 'ANIMATION_ENDED' };
 
-export const reducer = (state: Inventory, action: Action): Inventory => {
-    function clearItemFromCells(item: Item, cells: Cells) {
-        const next = [...cells];
+export const reducer = (state: Game, action: Action): Game => {
+    // function clearItemFromCells(item: Item, cells: Cells) {
+    //     const next = [...cells];
 
-        for (let y = 0; y < item.height; y++) {
-            for (let x = 0; x < item.width; x++) {
-                next[y + item.y][x + item.x] = 'none';
-            }
-        }
-        return next;
-    }
+    //     for (let y = 0; y < item.height; y++) {
+    //         for (let x = 0; x < item.width; x++) {
+    //             next[y + item.y][x + item.x] = 'none';
+    //         }
+    //     }
+    //     return next;
+    // }
 
-    function setItemToCells(item: Item, cells: Cells) {
-        const next = [...cells];
+    // function setItemToCells(item: Item, cells: Cells) {
+    //     const next = [...cells];
 
-        for (let y = 0; y < item.height; y++) {
-            for (let x = 0; x < item.width; x++) {
-                next[y + item.y][x + item.x] = item.id;
-            }
-        }
-        return next;
-    }
+    //     for (let y = 0; y < item.height; y++) {
+    //         for (let x = 0; x < item.width; x++) {
+    //             next[y + item.y][x + item.x] = item.id;
+    //         }
+    //     }
+    //     return next;
+    // }
 
-    function itemWillFit(item: Item, point: Point, cells: Cells) {
-        for (let y = 0; y < item.height; y++) {
-            for (let x = 0; x < item.width; x++) {
-                const cell = cells[y + point.y][x + point.x];
-                if (cell !== 'none' && cell !== item.id) {
-                    return false;
-                }
-            }
-        }
+    // function itemWillFit(item: Item, point: Point, cells: Cells) {
+    //     for (let y = 0; y < item.height; y++) {
+    //         for (let x = 0; x < item.width; x++) {
+    //             const cell = cells[y + point.y][x + point.x];
+    //             if (cell !== 'none' && cell !== item.id) {
+    //                 return false;
+    //             }
+    //         }
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
     switch (action.type) {
         case 'ADD_ITEM': {
@@ -57,10 +57,10 @@ export const reducer = (state: Inventory, action: Action): Inventory => {
 
             console.log(item);
 
-            if (!nextState.items.some((i) => i.name === item.name)) {
-                nextState.items.push(item);
-                nextState.cells = setItemToCells(item, nextState.cells);
-            }
+            // if (!nextState.items.some((i) => i.name === item.name)) {
+            //     nextState.items.push(item);
+            //     nextState.cells = setItemToCells(item, nextState.cells);
+            // }
 
             return nextState;
         }
@@ -68,27 +68,27 @@ export const reducer = (state: Inventory, action: Action): Inventory => {
             const nextState = { ...state };
             const { item, point } = action.payload;
 
-            nextState.cells = clearItemFromCells(item, nextState.cells);
+            // nextState.cells = clearItemFromCells(item, nextState.cells);
 
-            item.x = point.x;
-            item.y = point.y;
+            // item.x = point.x;
+            // item.y = point.y;
 
-            nextState.cells = setItemToCells(item, nextState.cells);
+            // nextState.cells = setItemToCells(item, nextState.cells);
 
             return nextState;
         }
         case 'DRAG_STARTED': {
             const nextState = { ...state };
             const { item } = action.payload;
-            const { x, y } = item;
+            // const { x, y } = item;
 
-            nextState.dragging = {
-                id: item.id,
-                initialPoint: { x, y },
-                nextPoint: { x, y },
-                path: item.path,
-                valid: true
-            };
+            // nextState.dragging = {
+            //     id: item.id,
+            //     initialPoint: { x, y },
+            //     nextPoint: { x, y },
+            //     path: item.path,
+            //     valid: true
+            // };
 
             return nextState;
         }
@@ -96,11 +96,11 @@ export const reducer = (state: Inventory, action: Action): Inventory => {
             const nextState = { ...state };
             const { item, point } = action.payload;
 
-            if (nextState.dragging) {
-                nextState.dragging.nextPoint = point;
+            // if (nextState.dragging) {
+            //     nextState.dragging.nextPoint = point;
 
-                nextState.dragging.valid = itemWillFit(item, point, nextState.cells);
-            }
+            //     // nextState.dragging.valid = itemWillFit(item, point, nextState.cells);
+            // }
 
             return nextState;
         }
@@ -108,22 +108,22 @@ export const reducer = (state: Inventory, action: Action): Inventory => {
             const nextState = { ...state };
             const { item } = action.payload;
 
-            if (nextState.dragging) {
-                const { valid, initialPoint, nextPoint } = nextState.dragging;
-                const point = valid ? nextPoint : initialPoint;
+            // if (nextState.dragging) {
+            //     const { valid, initialPoint, nextPoint } = nextState.dragging;
+            //     const point = valid ? nextPoint : initialPoint;
 
-                nextState.cells = clearItemFromCells(item, nextState.cells);
+            //     // nextState.cells = clearItemFromCells(item, nextState.cells);
 
-                item.x = point.x;
-                item.y = point.y;
+            //     // item.x = point.x;
+            //     // item.y = point.y;
 
-                nextState.cells = setItemToCells(item, nextState.cells);
+            //     // nextState.cells = setItemToCells(item, nextState.cells);
 
-                const index = nextState.items.findIndex((i) => i.id === item.id);
-                nextState.items[index] = item;
+            //     const index = nextState.items.findIndex((i) => i.id === item.id);
+            //     nextState.items[index] = item;
 
-                return nextState;
-            }
+            //     return nextState;
+            // }
 
             return nextState;
         }

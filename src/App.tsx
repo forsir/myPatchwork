@@ -12,11 +12,14 @@ export default function App() {
         // });
     }, []);
 
-    const draggingItem = state.items.find((i) => i.id === state.dragging?.id);
+    // const draggingItem = state.items.find((i) => i.id === state.dragging?.id);
 
     return (
         <div className="relative flex items-center justify-center w-screen h-screen overflow-hidden">
-            <div
+            {/* {state.items.map((item) => {
+                // return <Part item={item} dispatch={dispatch} />;
+            })} */}
+            {/* <div
                 className="absolute top-0 left-0 grid grid-cols-10 gap-1 grid-rows-10"
                 style={{ gridTemplateColumns: 'repeat(10, 42px)', gridAutoRows: '42px' }}
             >
@@ -48,12 +51,9 @@ export default function App() {
                             width: draggingItem.width * 44 - 2,
                             height: draggingItem.height * 44 - 2
                         }}
-                    /> */}
+                    /> 
                 </>
-            )}
-            {/* {state.items.map((item) => {
-                // return <Part item={item} dispatch={dispatch} />;
-            })} */}
+            )} */}
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import { Item, Cells, Point, Inventory } from './types';
+import { Cells, Inventory, Item, Point } from './types';
 
 export const initial: Inventory = {
     items: [],
@@ -55,9 +55,12 @@ export const reducer = (state: Inventory, action: Action): Inventory => {
             const nextState = { ...state };
             const { item } = action.payload;
 
-            nextState.items.push(item);
+            console.log(item);
 
-            nextState.cells = setItemToCells(item, nextState.cells);
+            if (!nextState.items.some((i) => i.name === item.name)) {
+                nextState.items.push(item);
+                nextState.cells = setItemToCells(item, nextState.cells);
+            }
 
             return nextState;
         }
@@ -83,6 +86,7 @@ export const reducer = (state: Inventory, action: Action): Inventory => {
                 id: item.id,
                 initialPoint: { x, y },
                 nextPoint: { x, y },
+                path: item.path,
                 valid: true
             };
 

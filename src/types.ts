@@ -5,6 +5,9 @@ export interface Item {
     y: number;
     height: number;
     width: number;
+    path: string;
+    rotated?: boolean;
+    sawed?: boolean;
 }
 
 export type Cells = string[][];
@@ -17,6 +20,7 @@ export type Inventory = {
         initialPoint: Point;
         nextPoint: Point;
         valid: boolean;
+        path?: string;
     };
 };
 

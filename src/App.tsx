@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useEffect, useReducer } from 'react';
 import Part from './Part';
 import { fruit } from './fruit';
@@ -39,19 +38,17 @@ export default function App() {
             </div>
             {state.dragging && draggingItem && (
                 <>
-                    <motion.div
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            backgroundColor: 'rgba(239, 239, 239,.8)',
-                            x: state.dragging.initialPoint.x * 44,
-                            y: state.dragging.initialPoint.y * 44,
-                            width: draggingItem.width * 44 - 2,
-                            height: draggingItem.height * 44 - 2
-                        }}
-                    />
-                    <motion.div
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="-1 -1 22 22"
+                        className="absolute w-16"
+                        style={{ top: state.dragging.initialPoint.y, left: state.dragging.initialPoint.x }}
+                    >
+                        <g stroke="#606060" strokeLinejoin="round" fill="none">
+                            <path d={state.dragging.path} />
+                        </g>
+                    </svg>
+                    {/* <motion.div
                         style={{
                             position: 'absolute',
                             top: 0,
@@ -63,7 +60,7 @@ export default function App() {
                             width: draggingItem.width * 44 - 2,
                             height: draggingItem.height * 44 - 2
                         }}
-                    />
+                    /> */}
                 </>
             )}
             {state.items.map((item) => {

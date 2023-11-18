@@ -1,56 +1,28 @@
-import { Game, Item, Point } from './types';
+import { PointData } from '../hooks/createEllipse';
+import { init } from './actions';
+import { Game, Item, PatchData, Point } from './types';
 
 export const initial: Game = {
-    // items: [],
-    // cells: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((y) => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((x) => 'none')),
-    // dragging: undefined
+    patches: [],
+    patchPositions: [],
+    dragged: null
 };
 
 export type Action =
+    | { type: 'INIT_GAME'; payload: { x: number; y: number; a: number; b: number } }
     | { type: 'ADD_ITEM'; payload: { item: Item } }
     | { type: 'MOVE_ITEM'; payload: { item: Item; point: Point } }
-    | { type: 'DRAG_STARTED'; payload: { item: Item } }
+    | { type: 'DRAG_STARTED'; payload: { data: PatchData; position: PointData } }
     | { type: 'DRAG_MOVED'; payload: { item: Item; point: Point } }
-    | { type: 'DRAG_ENDED'; payload: { item: Item } }
+    | { type: 'DRAG_ENDED'; payload: { data: PatchData; position: PointData } }
     | { type: 'ANIMATION_ENDED' };
 
 export const reducer = (state: Game, action: Action): Game => {
-    // function clearItemFromCells(item: Item, cells: Cells) {
-    //     const next = [...cells];
-
-    //     for (let y = 0; y < item.height; y++) {
-    //         for (let x = 0; x < item.width; x++) {
-    //             next[y + item.y][x + item.x] = 'none';
-    //         }
-    //     }
-    //     return next;
-    // }
-
-    // function setItemToCells(item: Item, cells: Cells) {
-    //     const next = [...cells];
-
-    //     for (let y = 0; y < item.height; y++) {
-    //         for (let x = 0; x < item.width; x++) {
-    //             next[y + item.y][x + item.x] = item.id;
-    //         }
-    //     }
-    //     return next;
-    // }
-
-    // function itemWillFit(item: Item, point: Point, cells: Cells) {
-    //     for (let y = 0; y < item.height; y++) {
-    //         for (let x = 0; x < item.width; x++) {
-    //             const cell = cells[y + point.y][x + point.x];
-    //             if (cell !== 'none' && cell !== item.id) {
-    //                 return false;
-    //             }
-    //         }
-    //     }
-
-    //     return true;
-    // }
-
     switch (action.type) {
+        case 'INIT_GAME':
+            const { x, y, a, b } = action.payload;
+            return init(x, y, a, b, state);
+
         case 'ADD_ITEM': {
             const nextState = { ...state };
             const { item } = action.payload;
@@ -79,7 +51,7 @@ export const reducer = (state: Game, action: Action): Game => {
         }
         case 'DRAG_STARTED': {
             const nextState = { ...state };
-            const { item } = action.payload;
+            const { data, position } = action.payload;
             // const { x, y } = item;
 
             // nextState.dragging = {
@@ -106,7 +78,7 @@ export const reducer = (state: Game, action: Action): Game => {
         }
         case 'DRAG_ENDED': {
             const nextState = { ...state };
-            const { item } = action.payload;
+            const { data, position } = action.payload;
 
             // if (nextState.dragging) {
             //     const { valid, initialPoint, nextPoint } = nextState.dragging;
@@ -128,7 +100,7 @@ export const reducer = (state: Game, action: Action): Game => {
             return nextState;
         }
         case 'ANIMATION_ENDED': {
-            return { ...state, dragging: undefined };
+            return { ...state, dragged: null };
         }
         default: {
             return state;

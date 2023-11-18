@@ -1,4 +1,4 @@
-export type pointData = { x: number; y: number; angle: number };
+export type PointData = { x: number; y: number; angle: number };
 
 function computeXY(a: number, b: number, angle: number) {
     const x = a * Math.sin(angle);
@@ -6,7 +6,7 @@ function computeXY(a: number, b: number, angle: number) {
     return { x: Math.round(x), y: Math.round(y), angle };
 }
 
-function distributePointsOnEllipse(a: number, b: number, numPoints: number): pointData[] {
+function distributePointsOnEllipse(a: number, b: number, numPoints: number): PointData[] {
     const points = [];
 
     for (let i = 0; i < numPoints; i++) {
@@ -24,7 +24,7 @@ function getLength(x1: number, y1: number, x2: number, y2: number): number {
     return length;
 }
 
-function recomputePoint(a: number, b: number, points: pointData[], index: number): pointData {
+function recomputePoint(a: number, b: number, points: PointData[], index: number): PointData {
     const count = points.length;
     index = index % count;
 
@@ -44,7 +44,7 @@ function recomputePoint(a: number, b: number, points: pointData[], index: number
     return computeXY(a, b, point.angle + angleChange);
 }
 
-function recompute(a: number, b: number, points: pointData[]): pointData[] {
+function recompute(a: number, b: number, points: PointData[]): PointData[] {
     // we don't touch the first point
     for (let i = 1; i < points.length; i++) {
         points[i] = recomputePoint(a, b, points, i);
@@ -52,21 +52,30 @@ function recompute(a: number, b: number, points: pointData[]): pointData[] {
     return points;
 }
 
-function finalTouch(points: pointData[]): pointData[] {
+function finalTouch(x: number, y: number, points: PointData[]): PointData[] {
+    points.forEach((p) => {
+        p.x += x;
+        p.y += y;
+    });
+
     const last = points.pop();
     if (last) {
         points.unshift(last);
     }
     points[1].y = points[0].y;
+
+    points[0].angle = 0;
+    points[1].angle = 0;
+    points[2].angle = 0;
     return points;
 }
 
-export function useEllipse(a: number, b: number, numPoints: number): pointData[] {
+export function createEllipse(x: number, y: number, a: number, b: number, numPoints: number): PointData[] {
     let data = distributePointsOnEllipse(a, b, numPoints);
 
     for (let i = 0; i < 15; i++) {
         data = recompute(a, b, data);
     }
 
-    return finalTouch(data);
+    return finalTouch(x, y, data);
 }

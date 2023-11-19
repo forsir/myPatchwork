@@ -9,7 +9,9 @@ export function ScoreBoard({ items }: ScoreBoardProps) {
     const size = 15;
     const borderSize = 2;
 
-    const elements = items.map((item) => <ScoreBoardItem data={item} borderSize={borderSize} size={size} />);
+    const elements = items.map((item) => (
+        <ScoreBoardItem key={item.id} data={item} borderSize={borderSize} size={size} />
+    ));
 
     return (
         <div className="absolute" style={{ left: '300px', top: '100px' }}>

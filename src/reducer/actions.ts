@@ -44,8 +44,12 @@ export function dragStart(id: string, position: { x: number; y: number }, state:
     };
 }
 
-export function dragEnd(id: string, state: Game): Game {
-    return { ...state };
+export function dragEnd(id: string, position: { x: number; y: number }, state: Game): Game {
+    const newDragged = { ...state.dragged, x: position.x, y: position.y } as DraggedData;
+    return {
+        ...state,
+        dragged: newDragged
+    };
 }
 
 export function rotateLeft(state: Game): Game {

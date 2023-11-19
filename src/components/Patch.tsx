@@ -33,7 +33,7 @@ export function Patch({ data, position, drag, dispatch }: PatchProps) {
                     y: position.y
                 }}
                 transition={{
-                    duration: 0.5
+                    duration: 1
                 }}
             >
                 <div>
@@ -58,9 +58,14 @@ export function Patch({ data, position, drag, dispatch }: PatchProps) {
                 }}
                 viewBox={data.viewBox}
                 width={`${data.viewBox.split(' ').map(Number)[2] * 4}px`}
-                style={{ position: 'absolute', transform: `rotate(${-position.angle}rad)` }}
+                style={{ position: 'absolute' }}
                 onDragStart={() => dispatch({ type: 'DRAG_STARTED', payload: { data, position } })}
-                onDragEnd={(event, info) => dispatch({ type: 'DRAG_ENDED', payload: { data, position: info.point } })}
+                onDragEnd={(_, info) => {
+                    dispatch({
+                        type: 'DRAG_ENDED',
+                        payload: { data, position: { x: position.x + info.offset.x, y: position.y + info.offset.y } }
+                    });
+                }}
             >
                 <path
                     d={data.svg}

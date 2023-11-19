@@ -1,5 +1,5 @@
 import { PointData } from '../hooks/createEllipse';
-import { init } from './actions';
+import { dragEnd, init } from './actions';
 import { Game, Item, PatchData, Point } from './types';
 
 export const initial: Game = {
@@ -77,27 +77,8 @@ export const reducer = (state: Game, action: Action): Game => {
             return nextState;
         }
         case 'DRAG_ENDED': {
-            const nextState = { ...state };
             const { data, position } = action.payload;
-
-            // if (nextState.dragging) {
-            //     const { valid, initialPoint, nextPoint } = nextState.dragging;
-            //     const point = valid ? nextPoint : initialPoint;
-
-            //     // nextState.cells = clearItemFromCells(item, nextState.cells);
-
-            //     // item.x = point.x;
-            //     // item.y = point.y;
-
-            //     // nextState.cells = setItemToCells(item, nextState.cells);
-
-            //     const index = nextState.items.findIndex((i) => i.id === item.id);
-            //     nextState.items[index] = item;
-
-            //     return nextState;
-            // }
-
-            return nextState;
+            return dragEnd(data.id, state);
         }
         case 'ANIMATION_ENDED': {
             return { ...state, dragged: null };

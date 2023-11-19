@@ -1,3 +1,9 @@
+import { Button } from './Button';
+
 export function Menu() {
-    return <div>Menu</div>;
+    return (
+        <div>
+            <Button />
+        </div>
+    );
 }

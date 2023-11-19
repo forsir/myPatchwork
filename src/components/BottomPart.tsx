@@ -5,7 +5,7 @@ export type BottomPartProps = {};
 
 export function BottomPart(props: BottomPartProps) {
     return (
-        <div>
+        <div className="flex flex-row justify-around w-full">
             <Blanket />
             <Menu />
             <Blanket />

@@ -3,7 +3,8 @@ import { PointData } from '../hooks/createEllipse';
 export type Game = {
     patches: PatchData[];
     patchPositions: PointData[];
-    dragged: null;
+    scoreBoardData: ScoreBoardDataItem[];
+    dragged: DraggedData | null;
 };
 
 export type PatchData = {
@@ -20,16 +21,22 @@ export type PatchData = {
     sawed?: boolean;
 };
 
-export type Patch = {
+export type DraggedData = {
     id: string;
-    name: string;
+};
+
+export type BorderPosition = 'b' | 't' | 'l' | 'r';
+
+export type ScoreBoardDataItem = {
+    id: number;
     x: number;
     y: number;
-    height: number;
-    width: number;
-    path: string;
-    rotated?: boolean;
-    sawed?: boolean;
+    w?: number;
+    h?: number;
+    button?: number;
+    patch?: number;
+    b?: BorderPosition[];
+    color: string;
 };
 
 export type Board = {};

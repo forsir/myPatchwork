@@ -11,7 +11,7 @@ export function Blanket({}: BlanketProps) {
             className="grid grid-cols-9 aspect-square grid-rows-9"
             style={{ width: '180px', backgroundColor: ' #506d84' }}
         >
-            Blanket
+            {cells}
         </div>
     );
 }

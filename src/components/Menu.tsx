@@ -13,18 +13,15 @@ export function Menu({ dispatch }: MenuProps) {
             <div className="flex flex-row">
                 <Button
                     text={<FontAwesomeIcon icon={faArrowRotateLeft} />}
-                    action={() => dispatch({ type: 'ANIMATION_ENDED' })}
+                    action={() => dispatch({ type: 'ROTATE_LEFT' })}
                 />
-                <Button
-                    text={<FontAwesomeIcon icon={faRepeat} />}
-                    action={() => dispatch({ type: 'ANIMATION_ENDED' })}
-                />
+                <Button text={<FontAwesomeIcon icon={faRepeat} />} action={() => dispatch({ type: 'FLIP' })} />
                 <Button
                     text={<FontAwesomeIcon icon={faArrowRotateRight} />}
-                    action={() => dispatch({ type: 'ANIMATION_ENDED' })}
+                    action={() => dispatch({ type: 'ROTATE_RIGHT' })}
                 />
             </div>
-            <Button text="Uložit" action={() => dispatch({ type: 'ANIMATION_ENDED' })} />
+            <Button text="Umístit" action={() => dispatch({ type: 'PLACE' })} />
         </div>
     );
 }

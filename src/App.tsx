@@ -15,14 +15,13 @@ export default function App() {
         dispatch({ payload: { x, y, a, b }, type: 'INIT_GAME' });
     }, []);
 
-    const draggingItem = state.patches.find((i) => i.id === state.dragged?.id);
-
     return (
         <div ref={main} className="relative w-screen h-screen overflow-hidden">
             <TopPart
                 patchPositions={state.patchPositions}
                 patches={state.patches}
                 dispatch={dispatch}
+                dragged={state.dragged}
                 scoreBoardData={state.scoreBoardData}
             />
             <BottomPart dispatch={dispatch} />

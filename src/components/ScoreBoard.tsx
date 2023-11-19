@@ -1,4 +1,5 @@
-import { BorderPosition, ScoreBoardDataItem } from '../reducer/types';
+import { ScoreBoardDataItem } from '../reducer/types';
+import { ScoreBoardItem } from './ScoreBoardItem';
 
 export type ScoreBoardProps = {
     items: ScoreBoardDataItem[];
@@ -8,30 +9,7 @@ export function ScoreBoard({ items }: ScoreBoardProps) {
     const size = 15;
     const borderSize = 2;
 
-    function checkBorder(positions: BorderPosition[] | undefined, position: BorderPosition) {
-        if (positions && positions.indexOf(position) > -1) {
-            return `${borderSize}px`;
-        }
-        return 0;
-    }
-
-    const elements = items.map((item) => (
-        <div
-            key={item.id}
-            className="absolute border-gray-900"
-            style={{
-                top: `${item.y * size}px`,
-                left: `${item.x * size}px`,
-                width: `${(item.w ?? 1) * size}px`,
-                height: `${(item.h ?? 1) * size}px`,
-                backgroundColor: item.color,
-                borderWidth: `${checkBorder(item.b, 't')} ${checkBorder(item.b, 'r')} ${checkBorder(
-                    item.b,
-                    'b'
-                )} ${checkBorder(item.b, 'l')}`
-            }}
-        ></div>
-    ));
+    const elements = items.map((item) => <ScoreBoardItem data={item} borderSize={borderSize} size={size} />);
 
     return (
         <div className="absolute" style={{ left: '300px', top: '100px' }}>

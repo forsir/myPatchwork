@@ -1,4 +1,4 @@
-export type PointData = { x: number; y: number; angle: number };
+export type PointData = { x: number; y: number; angle: number; flipped?: boolean };
 
 function computeXY(a: number, b: number, angle: number) {
     const x = a * Math.sin(angle);

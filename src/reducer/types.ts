@@ -5,6 +5,8 @@ export type Game = {
     patchPositions: PointData[];
     scoreBoardData: ScoreBoardDataItem[];
     dragged: DraggedData | null;
+    player1: PlayerData;
+    player2: PlayerData;
 };
 
 export type PatchData = {
@@ -22,7 +24,11 @@ export type PatchData = {
 };
 
 export type DraggedData = {
-    id: string;
+    patch: PatchData;
+    x: number;
+    y: number;
+    angle: number;
+    flipped: boolean;
 };
 
 export type BorderPosition = 'b' | 't' | 'l' | 'r';
@@ -41,7 +47,7 @@ export type ScoreBoardDataItem = {
 
 export type Board = {};
 
-export type PlayerScore = {};
+export type PlayerData = {};
 
 export type Point = { x: number; y: number };
 

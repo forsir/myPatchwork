@@ -1,13 +1,16 @@
+import { Action } from '../reducer/reducer';
 import { Blanket } from './Blanket';
 import { Menu } from './Menu';
 
-export type BottomPartProps = {};
+export type BottomPartProps = {
+    dispatch: React.Dispatch<Action>;
+};
 
-export function BottomPart(props: BottomPartProps) {
+export function BottomPart({ dispatch }: BottomPartProps) {
     return (
-        <div className="flex flex-row justify-around w-full">
+        <div className="flex flex-row justify-around w-full mt-20">
             <Blanket />
-            <Menu />
+            <Menu dispatch={dispatch} />
             <Blanket />
         </div>
     );

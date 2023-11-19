@@ -25,7 +25,7 @@ export default function App() {
                 dispatch={dispatch}
                 scoreBoardData={state.scoreBoardData}
             />
-            <BottomPart />
+            <BottomPart dispatch={dispatch} />
         </div>
     );
 }

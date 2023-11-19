@@ -5,7 +5,7 @@ export type ScoreBoardProps = {
 };
 
 export function ScoreBoard({ items }: ScoreBoardProps) {
-    const size = 30;
+    const size = 15;
     const borderSize = 2;
 
     function checkBorder(positions: BorderPosition[] | undefined, position: BorderPosition) {
@@ -17,13 +17,15 @@ export function ScoreBoard({ items }: ScoreBoardProps) {
 
     const elements = items.map((item) => (
         <div
-            className="absolute outline outline-gray-700"
+            key={item.id}
+            className="absolute border-gray-900"
             style={{
                 top: `${item.y * size}px`,
                 left: `${item.x * size}px`,
                 width: `${(item.w ?? 1) * size}px`,
                 height: `${(item.h ?? 1) * size}px`,
-                outlineWidth: `${checkBorder(item.b, 't')} ${checkBorder(item.b, 'r')} ${checkBorder(
+                backgroundColor: item.color,
+                borderWidth: `${checkBorder(item.b, 't')} ${checkBorder(item.b, 'r')} ${checkBorder(
                     item.b,
                     'b'
                 )} ${checkBorder(item.b, 'l')}`
@@ -32,7 +34,7 @@ export function ScoreBoard({ items }: ScoreBoardProps) {
     ));
 
     return (
-        <div className="absolute" style={{ left: '400px', top: '200px' }}>
+        <div className="absolute" style={{ left: '300px', top: '100px' }}>
             <div className="relative">{elements}</div>
         </div>
     );

@@ -3,7 +3,7 @@ export type BlanketProps = {};
 export function Blanket({}: BlanketProps) {
     const cells = [];
     for (let i = 0; i < 81; i++) {
-        cells.push(<div className="aspect-square outline outline-1 outline-gray-500"></div>);
+        cells.push(<div key={i} className="aspect-square outline outline-1 outline-gray-500"></div>);
     }
 
     return (

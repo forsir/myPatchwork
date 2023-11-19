@@ -5,6 +5,7 @@ import { Game, Item, PatchData, Point } from './types';
 export const initial: Game = {
     patches: [],
     patchPositions: [],
+    scoreBoardData: [],
     dragged: null
 };
 

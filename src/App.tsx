@@ -19,7 +19,12 @@ export default function App() {
 
     return (
         <div ref={main} className="relative w-screen h-screen overflow-hidden">
-            <TopPart patchPositions={state.patchPositions} patches={state.patches} dispatch={dispatch} />
+            <TopPart
+                patchPositions={state.patchPositions}
+                patches={state.patches}
+                dispatch={dispatch}
+                scoreBoardData={state.scoreBoardData}
+            />
             <BottomPart />
         </div>
     );

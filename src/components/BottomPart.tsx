@@ -9,9 +9,9 @@ export type BottomPartProps = {
 export function BottomPart({ dispatch }: BottomPartProps) {
     return (
         <div className="flex flex-row justify-around w-full mt-20">
-            <Blanket />
+            <Blanket playerId="player1" dispatch={dispatch} />
             <Menu dispatch={dispatch} />
-            <Blanket />
+            <Blanket playerId="player1" dispatch={dispatch} />
         </div>
     );
 }

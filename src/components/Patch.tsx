@@ -33,7 +33,7 @@ export function Patch({ data, position, drag, dispatch }: PatchProps) {
                     y: position.y
                 }}
                 transition={{
-                    duration: 1
+                    duration: 0.5
                 }}
             >
                 <div>
@@ -54,7 +54,10 @@ export function Patch({ data, position, drag, dispatch }: PatchProps) {
                     rotateY: position.flipped ? 180 : 0
                 }}
                 transition={{
-                    duration: 0.5
+                    x: { duration: 0.5 },
+                    y: { duration: 0.5 },
+                    rotate: { duration: 0.5 },
+                    rotateY: { duration: 0.5 }
                 }}
                 viewBox={data.viewBox}
                 width={`${data.viewBox.split(' ').map(Number)[2] * 4}px`}

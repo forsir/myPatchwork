@@ -1,4 +1,4 @@
-import { dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight } from './actions';
+import { dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setSizes } from './actions';
 import { Game, PatchData } from './types';
 
 export const initial: Game = {
@@ -7,11 +7,13 @@ export const initial: Game = {
     scoreBoardData: [],
     dragged: null,
     player1: {},
-    player2: {}
+    player2: {},
+    currentPlayerId: 'player1'
 };
 
 export type Action =
     | { type: 'INIT_GAME'; payload: { x: number; y: number; a: number; b: number } }
+    | { type: 'SET_SIZES'; payload: { id: 'player1' | 'player2'; x: number; y: number } }
     // | { type: 'MOVE_ITEM'; payload: { item: Item; point: Point } }
     | { type: 'DRAG_STARTED'; payload: { data: PatchData; position: { x: number; y: number } } }
     | { type: 'DRAG_ENDED'; payload: { data: PatchData; position: { x: number; y: number } } }
@@ -25,6 +27,11 @@ export const reducer = (state: Game, action: Action): Game => {
         case 'INIT_GAME': {
             const { x, y, a, b } = action.payload;
             return init(x, y, a, b, state);
+        }
+
+        case 'SET_SIZES': {
+            const { id, x, y } = action.payload;
+            return setSizes(id, x, y, state);
         }
 
         case 'DRAG_STARTED': {

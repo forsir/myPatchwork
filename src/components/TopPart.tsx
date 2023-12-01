@@ -1,6 +1,5 @@
-import { PointData } from '../hooks/createEllipse';
 import { Action } from '../reducer/reducer';
-import { DraggedData, PatchData, ScoreBoardDataItem } from '../reducer/types';
+import { DraggedData, PatchData, PointData, ScoreBoardDataItem } from '../reducer/types';
 import { Patch } from './Patch';
 import { ScoreBoard } from './ScoreBoard';
 
@@ -22,6 +21,7 @@ export function TopPart({ patches, patchPositions, scoreBoardData, dragged, disp
                         key={patch.id}
                         data={patch}
                         drag={i < 3}
+                        isPlaced={false}
                         position={dragged?.patch.id === patch.id ? dragged : patchPositions[i]}
                         dispatch={dispatch}
                     />

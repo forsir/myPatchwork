@@ -1,21 +1,27 @@
-import { dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setSizes } from './actions';
+import { drag, dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setSizes } from './actions';
 import { Game, PatchData } from './types';
 
 export const initial: Game = {
+    gameData: {},
     patches: [],
     patchPositions: [],
     scoreBoardData: [],
     dragged: null,
-    player1: {},
-    player2: {},
+    player1: { blanketX: 0, blanketY: 0, patches: [], positions: [], filled: getFilled(), buttons: 5, time: 0 },
+    player2: { blanketX: 0, blanketY: 0, patches: [], positions: [], filled: getFilled(), buttons: 5, time: 0 },
     currentPlayerId: 'player1'
 };
+
+function getFilled(): number[][] {
+    return Array.from({ length: 9 }, () => Array(9).fill(0));
+}
 
 export type Action =
     | { type: 'INIT_GAME'; payload: { x: number; y: number; a: number; b: number } }
     | { type: 'SET_SIZES'; payload: { id: 'player1' | 'player2'; x: number; y: number } }
     // | { type: 'MOVE_ITEM'; payload: { item: Item; point: Point } }
     | { type: 'DRAG_STARTED'; payload: { data: PatchData; position: { x: number; y: number } } }
+    | { type: 'DRAG'; payload: { data: PatchData; position: { x: number; y: number } } }
     | { type: 'DRAG_ENDED'; payload: { data: PatchData; position: { x: number; y: number } } }
     | { type: 'ROTATE_LEFT' }
     | { type: 'ROTATE_RIGHT' }
@@ -37,6 +43,11 @@ export const reducer = (state: Game, action: Action): Game => {
         case 'DRAG_STARTED': {
             const { data, position } = action.payload;
             return dragStart(data.id, position, state);
+        }
+
+        case 'DRAG': {
+            const { data, position } = action.payload;
+            return drag(data.id, position, state);
         }
 
         case 'DRAG_ENDED': {

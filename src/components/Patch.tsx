@@ -1,19 +1,39 @@
 import { faCircleDot, faHourglass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { motion } from 'framer-motion';
-import { PointData } from '../hooks/createEllipse';
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect } from 'react';
 import { Action } from '../reducer/reducer';
-import { PatchData } from '../reducer/types';
+import { PatchData, PointData } from '../reducer/types';
 
 export type PatchProps = {
     data: PatchData;
     position: PointData;
     drag: boolean;
-    dispatch: React.Dispatch<Action>;
+    isPlaced: boolean;
+    dispatch: React.Dispatch<Action> | null;
 };
 
-export function Patch({ data, position, drag, dispatch }: PatchProps) {
-    const sawed = data.sawed ? (
+export function Patch({ data, position, drag, isPlaced, dispatch }: PatchProps) {
+    const controls = useAnimation();
+    useEffect(() => {
+        if (isPlaced) {
+            controls.set({
+                x: position.x,
+                y: position.y,
+                rotate: `${-position.angle}rad`,
+                rotateY: position.flipped ? 180 : 0
+            });
+        } else {
+            controls.start({
+                x: position.x,
+                y: position.y,
+                rotate: `${-position.angle}rad`,
+                rotateY: position.flipped ? 180 : 0
+            });
+        }
+    }, [position, isPlaced]);
+
+    const sawed = isPlaced ? (
         <path
             d={data.svg}
             fill="none"
@@ -26,33 +46,32 @@ export function Patch({ data, position, drag, dispatch }: PatchProps) {
 
     return (
         <div className="relative">
-            <motion.div
-                className="absolute bottom-0 z-10 p-1 text-sm border border-black bg-slate-100"
-                animate={{
-                    x: position.x,
-                    y: position.y
-                }}
-                transition={{
-                    duration: 0.5
-                }}
-            >
-                <div>
-                    <FontAwesomeIcon icon={faHourglass} /> {data.time}
-                </div>
-                <div>
-                    <FontAwesomeIcon icon={faCircleDot} /> {data.price}
-                </div>
-            </motion.div>
+            {!isPlaced ? (
+                <motion.div
+                    className="absolute z-10 p-1 text-sm border border-black bottom-1 bg-slate-100"
+                    animate={{
+                        x: position.x,
+                        y: position.y
+                    }}
+                    transition={{
+                        duration: 0.5
+                    }}
+                >
+                    <div>
+                        <FontAwesomeIcon icon={faHourglass} className="text-xs" /> {data.time}
+                    </div>
+                    <div>
+                        <FontAwesomeIcon icon={faCircleDot} className="text-xs" /> {data.price}
+                    </div>
+                </motion.div>
+            ) : (
+                ''
+            )}
             <motion.svg
                 xmlns="http://www.w3.org/2000/svg"
                 drag={drag}
                 dragMomentum={false}
-                animate={{
-                    x: position.x,
-                    y: position.y,
-                    rotate: `${-position.angle}rad`,
-                    rotateY: position.flipped ? 180 : 0
-                }}
+                animate={controls}
                 transition={{
                     x: { duration: 0.5 },
                     y: { duration: 0.5 },
@@ -61,10 +80,19 @@ export function Patch({ data, position, drag, dispatch }: PatchProps) {
                 }}
                 viewBox={data.viewBox}
                 width={`${data.viewBox.split(' ').map(Number)[2] * 4}px`}
-                style={{ position: 'absolute' }}
-                onDragStart={() => dispatch({ type: 'DRAG_STARTED', payload: { data, position } })}
+                style={{
+                    position: 'absolute',
+                    zIndex: 9
+                }}
+                onDragStart={() => dispatch?.({ type: 'DRAG_STARTED', payload: { data, position } })}
+                // onDrag={(_, info) =>
+                //     dispatch?.({
+                //         type: 'DRAG',
+                //         payload: { data, position: { x: info.point.x, y: info.point.y } }
+                //     })
+                // }
                 onDragEnd={(_, info) => {
-                    dispatch({
+                    dispatch?.({
                         type: 'DRAG_ENDED',
                         payload: { data, position: { x: position.x + info.offset.x, y: position.y + info.offset.y } }
                     });

@@ -1,4 +1,4 @@
-export type PointData = { x: number; y: number; angle: number; flipped?: boolean };
+import { PointData } from '../reducer/types';
 
 function computeXY(a: number, b: number, angle: number) {
     const x = a * Math.sin(angle);

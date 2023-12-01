@@ -112,5 +112,12 @@ export function flip(state: Game): Game {
 }
 
 export function place(state: Game): Game {
-    return { ...state, patches: removeElement(state.patches, state.dragged?.patch.id), dragged: null };
+    const player = state.currentPlayerId === 'player1' ? 'player2' : 'player1';
+
+    return {
+        ...state,
+        patches: removeElement(state.patches, state.dragged?.patch.id),
+        dragged: null,
+        currentPlayerId: player
+    };
 }

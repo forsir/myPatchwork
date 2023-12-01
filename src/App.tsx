@@ -24,7 +24,12 @@ export default function App() {
                 dragged={state.dragged}
                 scoreBoardData={state.scoreBoardData}
             />
-            <BottomPart dispatch={dispatch} />
+            <BottomPart
+                dispatch={dispatch}
+                player1={state.player1}
+                player2={state.player2}
+                currentPlayerId={state.currentPlayerId}
+            />
         </div>
     );
 }

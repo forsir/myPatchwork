@@ -636,6 +636,10 @@ video {
   cursor: pointer;
 }
 
+.resize {
+  resize: both;
+}
+
 .grid-cols-9 {
   grid-template-columns: repeat(9, minmax(0, 1fr));
 }
@@ -752,4 +756,8 @@ html {
   /* IE 10 and IE 11 */
   user-select: none;
   /* Standard syntax */
+}
+
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
 }

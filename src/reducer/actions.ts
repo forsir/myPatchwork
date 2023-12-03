@@ -44,8 +44,10 @@ export function dragStart(id: string, position: { x: number; y: number }, state:
             filled: patch.filled,
             x: position.x,
             y: position.y,
+            isDragging: true,
             angle: 0,
-            flipped: false
+            flipped: false,
+            onBlanket: false
         }
     };
 }
@@ -70,6 +72,7 @@ export function dragEnd(id: string, position: { x: number; y: number }, state: G
     let y = Math.round(position.y);
     const player = state[state.currentPlayerId];
 
+    let onBlanket = false;
     if (
         x > player.blanketX - 10 &&
         x < player.blanketX + 180 &&
@@ -78,6 +81,7 @@ export function dragEnd(id: string, position: { x: number; y: number }, state: G
     ) {
         x = player.blanketX + Math.round((x - player.blanketX) / 20) * 20;
         y = player.blanketY + Math.round((y - player.blanketY) / 20) * 20;
+        onBlanket = true;
     }
 
     x = Math.round(x);
@@ -86,7 +90,9 @@ export function dragEnd(id: string, position: { x: number; y: number }, state: G
     const newDragged = {
         ...state.dragged,
         x,
-        y
+        y,
+        isDragging: false,
+        onBlanket
     } as DraggedData;
 
     console.log(

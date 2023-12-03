@@ -29,6 +29,8 @@ export type DraggedData = {
     y: number;
     angle: number;
     flipped: boolean;
+    isDragging: boolean;
+    onBlanket: boolean;
     filled: number[][];
 };
 
@@ -60,8 +62,6 @@ export type PointData = {
     x: number;
     y: number;
     angle: number;
-    initialX?: number;
-    initialY?: number;
     flipped?: boolean;
-    changed?: number;
+    isDragging?: boolean;
 };

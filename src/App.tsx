@@ -28,6 +28,7 @@ export default function App() {
                 dispatch={dispatch}
                 player1={state.player1}
                 player2={state.player2}
+                menuData={state.dragged}
                 currentPlayerId={state.currentPlayerId}
             />
         </div>

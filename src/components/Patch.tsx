@@ -16,7 +16,7 @@ export type PatchProps = {
 export function Patch({ data, position, drag, isPlaced, dispatch }: PatchProps) {
     const controls = useAnimation();
     useEffect(() => {
-        if (isPlaced) {
+        if (isPlaced || position.isDragging) {
             controls.set({
                 x: position.x,
                 y: position.y,
@@ -34,13 +34,16 @@ export function Patch({ data, position, drag, isPlaced, dispatch }: PatchProps) 
     }, [position, isPlaced]);
 
     const sawed = isPlaced ? (
-        <path
+        <motion.path
             d={data.svg}
             fill="none"
             stroke="#606060"
-            strokeWidth="2px"
+            strokeWidth="1px"
             strokeDasharray="0.5 1"
             strokeDashoffset="3"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1 }}
         />
     ) : undefined;
 

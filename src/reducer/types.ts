@@ -64,4 +64,5 @@ export type PointData = {
     angle: number;
     flipped?: boolean;
     isDragging?: boolean;
+    filled?: number[][];
 };

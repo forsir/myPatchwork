@@ -2,7 +2,8 @@ import { patchesData } from '../data/patchesData';
 import { scoreBoardData } from '../data/scoreBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
-import { DraggedData, Game, PatchData, PlayerData } from './types';
+import { DraggedData, Game, PlayerData } from './types';
+import { flipMatrix, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
 
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
@@ -13,18 +14,11 @@ export function init(x: number, y: number, a: number, b: number, state: Game): G
 
 export function setSizes(id: 'player1' | 'player2', x: number, y: number, state: Game): Game {
     const player = { ...state[id], blanketX: Math.round(x), blanketY: Math.round(y) } as PlayerData;
-    return { ...state, [id]: player };
-}
 
-function removeElement(patches: PatchData[], id: string | undefined) {
-    if (id === undefined) {
-        return patches;
-    }
+    // const positions = createEllipse(x, y, a, b, patchesData.length);
 
-    const index = patches.findIndex((f) => f.id === id);
-    const newP1 = patches.slice(0, index);
-    const newP2 = patches.slice(index + 1);
-    return [...newP2, ...newP1];
+    const positions = state.patchPositions;
+    return { ...state, [id]: player, patchPositions: positions };
 }
 
 export function dragStart(id: string, position: { x: number; y: number }, state: Game): Game {
@@ -95,32 +89,10 @@ export function dragEnd(id: string, position: { x: number; y: number }, state: G
         onBlanket
     } as DraggedData;
 
-    console.log(
-        'drag',
-        position,
-        [player.blanketX, player.blanketY],
-        [x, y],
-        [x - player.blanketX, y - player.blanketY]
-    );
-
     return {
         ...state,
         dragged: newDragged
     };
-}
-
-function rotate(matrix: number[][], direction: number) {
-    // Make the rows to become cols (transpose)
-    const newMatrix = matrix.map((_, index) => matrix.map((column) => column[index]));
-    // Reverse each row to get a rotated matrix
-    if (direction > 0) {
-        return newMatrix.map((row) => row.reverse());
-    }
-    return newMatrix.reverse();
-}
-
-function flipMatrix(matrix: number[][]) {
-    return matrix.map((row) => row.reverse());
 }
 
 export function rotateLeft(state: Game): Game {
@@ -130,8 +102,8 @@ export function rotateLeft(state: Game): Game {
 
     const newDragged = {
         ...state.dragged,
-        filled: rotate(state.dragged.filled, -1),
-        angle: (state.dragged?.angle ?? 0) + Math.PI / 2
+        filled: rotateMatrixLeft(state.dragged.filled),
+        angle: (state.dragged?.angle ?? 0) + 90
     } as DraggedData;
     return { ...state, dragged: newDragged };
 }
@@ -143,8 +115,8 @@ export function rotateRight(state: Game): Game {
 
     const newDragged = {
         ...state.dragged,
-        filled: rotate(state.dragged.filled, 1),
-        angle: (state.dragged?.angle ?? 0) - Math.PI / 2
+        filled: rotateMatrixRight(state.dragged.filled),
+        angle: (state.dragged?.angle ?? 0) - 90
     } as DraggedData;
     return { ...state, dragged: newDragged };
 }
@@ -182,7 +154,7 @@ export function place(state: Game): Game {
         }
     ];
 
-    console.log('place', state.dragged.x - playerData.blanketX, state.dragged.y - playerData.blanketY);
+    // console.log('place', state.dragged.x - playerData.blanketX, state.dragged.y - playerData.blanketY);
 
     playerData.buttons -= state.dragged.patch.price;
     playerData.time += state.dragged.patch.time;

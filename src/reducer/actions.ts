@@ -1,5 +1,5 @@
 import { patchesData } from '../data/patchesData';
-import { scoreBoardData } from '../data/scoreBoardData';
+import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
 import { DraggedData, Game, PlayerData } from './types';
@@ -8,8 +8,8 @@ import { flipMatrix, removeElement, rotateMatrixLeft, rotateMatrixRight } from '
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
     const positions = createEllipse(x, y, a, b, patches.length);
-    const scoreBoardDataItems = [...scoreBoardData];
-    return { ...state, patches: patches, patchPositions: positions, scoreBoardData: scoreBoardDataItems };
+    const timeBoardDataItems = timeBoardData.map((d) => ({ ...d }));
+    return { ...state, patches: patches, patchPositions: positions, timeBoardData: timeBoardDataItems };
 }
 
 export function setSizes(id: 'player1' | 'player2', x: number, y: number, state: Game): Game {
@@ -122,6 +122,19 @@ export function rotateRight(state: Game): Game {
 }
 
 export function flip(state: Game): Game {
+    if (!state.dragged) {
+        return state;
+    }
+
+    const newDragged = {
+        ...state.dragged,
+        filled: flipMatrix(state.dragged.filled),
+        flipped: !state.dragged?.flipped
+    } as DraggedData;
+    return { ...state, dragged: newDragged };
+}
+
+export function skip(state: Game): Game {
     if (!state.dragged) {
         return state;
     }

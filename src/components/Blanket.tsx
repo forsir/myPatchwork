@@ -44,6 +44,7 @@ export function Blanket({ playerId, playerData, currentPlayerId, dispatch }: Bla
             dispatch={null}
             drag={false}
             isPlaced={true}
+            onBlanket={false}
             position={{ ...playerData.positions[i] }}
         />
     ));

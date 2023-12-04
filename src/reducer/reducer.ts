@@ -1,14 +1,43 @@
-import { drag, dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setSizes } from './actions';
+import { drag, dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setSizes, skip } from './actions';
 import { Game, PatchData } from './types';
 
 export const initial: Game = {
-    gameData: {},
+    gameData: {
+        cellSize: 30,
+        colors: {
+            player1: '#889EAF',
+            player2: '#BD74A0',
+            timeStart: '#ff0000',
+            timeNormal: '#ffc43a',
+            timeButton: '#ffc43b',
+            timePatch: '#8B4513',
+            timeEnd: '#ff0000'
+        }
+    },
     patches: [],
     patchPositions: [],
-    scoreBoardData: [],
+    timeBoardData: [],
     dragged: null,
-    player1: { blanketX: 0, blanketY: 0, patches: [], positions: [], filled: getFilled(), buttons: 5, time: 0 },
-    player2: { blanketX: 0, blanketY: 0, patches: [], positions: [], filled: getFilled(), buttons: 5, time: 0 },
+    player1: {
+        blanketX: 0,
+        blanketY: 0,
+        patches: [],
+        positions: [],
+        filled: getFilled(),
+        buttons: 5,
+        income: 0,
+        time: 0
+    },
+    player2: {
+        blanketX: 0,
+        blanketY: 0,
+        patches: [],
+        positions: [],
+        filled: getFilled(),
+        buttons: 5,
+        income: 0,
+        time: 0
+    },
     currentPlayerId: 'player1'
 };
 
@@ -26,6 +55,7 @@ export type Action =
     | { type: 'ROTATE_LEFT' }
     | { type: 'ROTATE_RIGHT' }
     | { type: 'FLIP' }
+    | { type: 'SKIP' }
     | { type: 'PLACE' };
 
 export const reducer = (state: Game, action: Action): Game => {
@@ -66,8 +96,13 @@ export const reducer = (state: Game, action: Action): Game => {
         case 'FLIP': {
             return flip(state);
         }
+
         case 'PLACE': {
             return place(state);
+        }
+
+        case 'SKIP': {
+            return skip(state);
         }
 
         default: {

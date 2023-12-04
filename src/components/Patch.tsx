@@ -9,11 +9,12 @@ export type PatchProps = {
     data: PatchData;
     position: PointData;
     drag: boolean;
+    onBlanket: boolean;
     isPlaced: boolean;
     dispatch: React.Dispatch<Action> | null;
 };
 
-export function Patch({ data, position, drag, isPlaced, dispatch }: PatchProps) {
+export function Patch({ data, position, drag, onBlanket, isPlaced, dispatch }: PatchProps) {
     const controls = useAnimation();
     useEffect(() => {
         let xt = 0;
@@ -37,7 +38,7 @@ export function Patch({ data, position, drag, isPlaced, dispatch }: PatchProps) 
                 y: position.y - yt,
                 rotate: -position.angle,
                 rotateY: position.flipped ? 180 : 0,
-                transition: position.onBlanket ? { duration: 0.1 } : { duration: 0.5 }
+                transition: onBlanket ? { duration: 0.1 } : { duration: 0.5 }
             });
         }
     }, [position, isPlaced]);

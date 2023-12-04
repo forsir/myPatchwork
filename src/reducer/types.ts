@@ -2,14 +2,27 @@ export type Game = {
     gameData: GameData;
     patches: PatchData[];
     patchPositions: PointData[];
-    scoreBoardData: ScoreBoardDataItem[];
+    timeBoardData: TimeBoardDataItem[];
     dragged: DraggedData | null;
     player1: PlayerData;
     player2: PlayerData;
     currentPlayerId: 'player1' | 'player2';
 };
 
-export type GameData = {};
+export type Colors = {
+    player1: string;
+    player2: string;
+    timeStart: string;
+    timeNormal: string;
+    timeButton: string;
+    timePatch: string;
+    timeEnd: string;
+};
+
+export type GameData = {
+    cellSize: number;
+    colors: Colors;
+};
 
 export type PatchData = {
     id: string;
@@ -24,29 +37,20 @@ export type PatchData = {
     filled: number[][];
 };
 
-export type DraggedData = {
+export type DraggedData = PointData & {
     patch: PatchData;
-    x: number;
-    y: number;
-    angle: number;
-    flipped: boolean;
-    isDragging: boolean;
     onBlanket: boolean;
     filled: number[][];
 };
 
-export type BorderPosition = 'b' | 't' | 'l' | 'r';
-
-export type ScoreBoardDataItem = {
-    id: number;
-    x: number;
-    y: number;
-    w?: number;
-    h?: number;
-    button?: number;
-    patch?: number;
-    b?: BorderPosition[];
-    color: string;
+export type TimeBoardDataItem = {
+    top: number;
+    left: number;
+    patch?: boolean;
+    button?: boolean;
+    type: 'start' | 'normal' | 'patch' | 'end';
+    value: number;
+    borderWidth: string;
 };
 
 export type PlayerData = {
@@ -56,6 +60,7 @@ export type PlayerData = {
     patches: PatchData[];
     positions: PointData[];
     buttons: number;
+    income: number;
     time: number;
 };
 
@@ -66,5 +71,4 @@ export type PointData = {
     flipped?: boolean;
     isDragging?: boolean;
     filled?: number[][];
-    onBlanket?: boolean;
 };

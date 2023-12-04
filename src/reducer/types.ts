@@ -14,7 +14,8 @@ export type GameData = {};
 export type PatchData = {
     id: string;
     svg: string;
-    viewBox: string;
+    width: number;
+    height: number;
     pattern: string;
     color: string;
     price: number;
@@ -65,4 +66,5 @@ export type PointData = {
     flipped?: boolean;
     isDragging?: boolean;
     filled?: number[][];
+    onBlanket?: boolean;
 };

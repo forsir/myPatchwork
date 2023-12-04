@@ -5,17 +5,23 @@ export function rotateMatrixLeft(matrix: number[][]): number[][] {
     return Array.from({ length: numCols }, (_, columnIndex) => matrix.map((row) => row[numCols - 1 - columnIndex]));
 }
 
+function reverse<T>(array: T[]) {
+    const newArray = [...array];
+    newArray.reverse();
+    return newArray;
+}
+
 export function rotateMatrixRight(matrix: number[][]): number[][] {
     const numCols: number = matrix[0].length;
     return flipMatrix(
         Array.from({ length: numCols }, (_, columnIndex) =>
-            matrix.map((row) => row[numCols - 1 - columnIndex]).reverse()
+            reverse(matrix.map((row) => row[numCols - 1 - columnIndex]))
         )
     );
 }
 
 export const flipMatrix = (matrix: number[][]) => {
-    return matrix.map((row) => row.reverse());
+    return reverse(matrix);
 };
 
 export function removeElement(patches: PatchData[], id: string | undefined) {

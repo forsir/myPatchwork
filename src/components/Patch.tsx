@@ -16,42 +16,39 @@ export type PatchProps = {
 export function Patch({ data, position, drag, isPlaced, dispatch }: PatchProps) {
     const controls = useAnimation();
     useEffect(() => {
+        let xt = 0;
+        let yt = 0;
+
+        if (position.angle % 180 !== 0) {
+            xt = (data.width - data.height) / 2;
+            yt = (data.height - data.width) / 2;
+        }
+
         if (isPlaced || position.isDragging) {
             controls.set({
-                x: position.x,
-                y: position.y,
-                rotate: `${-position.angle}rad`,
+                x: position.x - xt,
+                y: position.y - yt,
+                rotate: -position.angle,
                 rotateY: position.flipped ? 180 : 0
             });
         } else {
             controls.start({
-                x: position.x,
-                y: position.y,
-                rotate: `${-position.angle}rad`,
-                rotateY: position.flipped ? 180 : 0
+                x: position.x - xt,
+                y: position.y - yt,
+                rotate: -position.angle,
+                rotateY: position.flipped ? 180 : 0,
+                transition: position.onBlanket ? { duration: 0.1 } : { duration: 0.5 }
             });
         }
     }, [position, isPlaced]);
 
-    const sawed = isPlaced ? (
-        <motion.path
-            d={data.svg}
-            fill="none"
-            stroke="#606060"
-            strokeWidth="1px"
-            strokeDasharray="0.5 1"
-            strokeDashoffset="3"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 1 }}
-        />
-    ) : undefined;
+    // isPlaced = true;
 
     return (
         <div className="relative">
             {!isPlaced ? (
                 <motion.div
-                    className="absolute z-10 p-1 text-sm border border-black bottom-1 bg-slate-100"
+                    className="absolute z-10 p-1 text-sm border border-black opacity-50 bottom-1 bg-slate-100"
                     animate={{
                         x: position.x,
                         y: position.y
@@ -70,19 +67,34 @@ export function Patch({ data, position, drag, isPlaced, dispatch }: PatchProps) 
             ) : (
                 ''
             )}
+
+            <div
+                className="absolute z-10 text-sm border border-black bg-slate-100"
+                style={{
+                    left: position.x,
+                    top: position.y
+                }}
+            >
+                {(position.filled ?? data.filled)
+                    .map((f) => f.join(' '))
+                    .map((r) => (
+                        <div>{r}</div>
+                    ))}
+            </div>
+
             <motion.svg
                 xmlns="http://www.w3.org/2000/svg"
                 drag={drag}
                 dragMomentum={false}
                 animate={controls}
-                transition={{
-                    x: { duration: 0.5 },
-                    y: { duration: 0.5 },
-                    rotate: { duration: 0.5 },
-                    rotateY: { duration: 0.5 }
-                }}
-                viewBox={data.viewBox}
-                width={`${data.viewBox.split(' ').map(Number)[2] * 4}px`}
+                viewBox={`0 0 ${data.width} ${data.height}`}
+                // transition={{
+                //     x: { duration: 0.5 },
+                //     y: { duration: 0.5 },
+                //     rotate: { duration: 0.5 },
+                //     rotateY: { duration: 0.5 }
+                // }}
+                width={`${data.width * 4}px`}
                 style={{
                     position: 'absolute',
                     zIndex: 9
@@ -106,7 +118,16 @@ export function Patch({ data, position, drag, isPlaced, dispatch }: PatchProps) 
                     fill={data.color}
                     // strokeWidth="1px" stroke="#606060"
                 />
-                {sawed}
+                {isPlaced ? (
+                    <path
+                        d={data.svg}
+                        fill="none"
+                        stroke="#606060"
+                        strokeWidth="1px"
+                        strokeDasharray="0.5 1"
+                        strokeDashoffset="3"
+                    />
+                ) : undefined}
             </motion.svg>
         </div>
     );

@@ -11,19 +11,19 @@ export function ScoreBoardItem({ data, size, borderSize }: ScoreBoardItemProps) 
         if (positions && positions.indexOf(position) > -1) {
             return `${borderSize}px`;
         }
-        return 0;
+        return '0.5px';
     }
 
     return (
         <div
             key={data.id}
-            className="absolute border-gray-900"
+            className="absolute bg-yellow-500 border-gray-900"
             style={{
                 top: `${data.y * size}px`,
                 left: `${data.x * size}px`,
                 width: `${(data.w ?? 1) * size}px`,
                 height: `${(data.h ?? 1) * size}px`,
-                backgroundColor: data.color,
+
                 borderWidth: `${checkBorder(data.b, 't')} ${checkBorder(data.b, 'r')} ${checkBorder(
                     data.b,
                     'b'

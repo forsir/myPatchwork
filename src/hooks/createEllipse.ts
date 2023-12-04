@@ -56,6 +56,7 @@ function finalTouch(x: number, y: number, points: PointData[]): PointData[] {
     points.forEach((p) => {
         p.x += x;
         p.y += y;
+        p.angle = p.angle * 57.2957795;
     });
 
     const last = points.pop();

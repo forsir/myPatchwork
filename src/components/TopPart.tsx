@@ -44,7 +44,7 @@ export function TopPart({
                         isPlaced={false}
                         position={dragged?.patch.id === patch.id ? dragged : patchPositions[i]}
                         onBlanket={dragged?.patch.id === patch.id ? dragged.onBlanket : false}
-                        size={gameData.patchCellSize}
+                        cellSize={gameData.patchCellSize}
                         dispatch={dispatch}
                     />
                 );

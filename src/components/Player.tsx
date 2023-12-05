@@ -47,7 +47,7 @@ export function Player({ playerId, playerData, currentPlayerId, size, dispatch }
             isPlaced={true}
             onBlanket={false}
             position={playerData.positions[i]}
-            size={size}
+            cellSize={size}
         />
     ));
 
@@ -55,12 +55,12 @@ export function Player({ playerId, playerData, currentPlayerId, size, dispatch }
         <motion.div
             className="relative"
             animate={{
-                filter: currentPlayerId === playerId ? undefined : 'grayscale(1)'
+                filter: currentPlayerId === playerId ? undefined : 'grayscale(1) blur(2px)'
             }}
             transition={{ duration: 2 }}
         >
             {patches}
-            <div className="absolute text-center bottom-full">
+            <div className="absolute text-center bottom-full" style={{ width: `${size * 9}px` }}>
                 <span className={playerId === currentPlayerId ? 'font-bold' : 'font-semibold'}>
                     {{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}
                 </span>{' '}

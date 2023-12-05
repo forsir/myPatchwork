@@ -12,19 +12,19 @@ export type PatchProps = {
     drag: boolean;
     onBlanket: boolean;
     isPlaced: boolean;
-    size: number;
+    cellSize: number;
     dispatch: React.Dispatch<Action> | null;
 };
 
-export function Patch({ data, position, drag, onBlanket, isPlaced, size, dispatch }: PatchProps) {
+export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, dispatch }: PatchProps) {
     const controls = useAnimation();
     useEffect(() => {
         let xt = 0;
         let yt = 0;
 
         if (position.angle % 180 !== 0) {
-            xt = (data.width - data.height) / 2;
-            yt = (data.height - data.width) / 2;
+            xt = patchSize(data.width - data.height, cellSize) / 2;
+            yt = patchSize(data.height - data.width, cellSize) / 2;
         }
 
         if (isPlaced || position.isDragging) {
@@ -46,6 +46,27 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, size, dispatc
     }, [position, isPlaced]);
 
     // isPlaced = true;
+
+    const buttons: any[] = [];
+    const scale = 0.7;
+    data.filled.forEach((row, rowIndex) =>
+        row.forEach((value, columnIndex) => {
+            if (value === 2) {
+                buttons.push(
+                    <path
+                        d="M2.5 0A.125.125 90 002.5 5 .125.125 90 002.5 0M2.5.625A.125.125 90 012.5 4.375.125.125 90 012.5.625M2.5.75A.125.125 90 002.5 4.25.125.125 90 002.5.75M1.875 1.625A.125.125 90 011.875 2.25.125.125 90 011.875 1.625M1.875 2.75A.125.125 90 011.875 3.375.125.125 90 011.875 2.75M3.125 2.75A.125.125 90 013.125 3.375.125.125 90 013.125 2.75M3.125 1.625A.125.125 90 013.125 2.25.125.125 90 013.125 1.625"
+                        fill="#6F5084"
+                        stroke="#000000"
+                        strokeWidth="0.15"
+                        fillOpacity="0.7"
+                        transform={`translate(${columnIndex * 5} ${rowIndex * 5}) scale(${scale}) translate(${
+                            2.5 - scale * 2.5
+                        } ${2.5 - scale * 2.5})`}
+                    />
+                );
+            }
+        })
+    );
 
     return (
         <div className="relative">
@@ -93,7 +114,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, size, dispatc
                 dragMomentum={false}
                 animate={controls}
                 viewBox={`0 0 ${data.width} ${data.height}`}
-                width={`${patchSize(data.width, size)}px`}
+                width={`${patchSize(data.width, cellSize)}px`}
                 style={{
                     position: 'absolute',
                     zIndex: 9
@@ -124,6 +145,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, size, dispatc
                     fill={data.color}
                     // strokeWidth="1px" stroke="#606060"
                 />
+                {buttons}
                 {isPlaced ? (
                     <path
                         d={data.svg}

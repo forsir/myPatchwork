@@ -76,7 +76,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, pla
         <div className="relative">
             {!isPlaced ? (
                 <motion.div
-                    className="absolute z-10 p-1 text-sm border border-black opacity-50 bottom-1 bg-slate-100"
+                    className="absolute z-50 p-1 text-sm border border-black bottom-1 bg-slate-100"
                     animate={{
                         x: position.x,
                         y: position.y
@@ -121,7 +121,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, pla
                 width={`${patchSize(data.width, cellSize)}px`}
                 style={{
                     position: 'absolute',
-                    zIndex: 9
+                    zIndex: isPlaced ? 20 : 40
                 }}
                 onDragStart={() => dispatch?.({ type: 'DRAG_STARTED', payload: { data, position } })}
                 // onDrag={(_, info) =>
@@ -144,9 +144,10 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, pla
                     });
                 }}
             >
-                <path
+                <motion.path
                     d={data.svg}
                     fill={cannotUse ? 'rgba(128, 128, 128, 0.5)' : data.color}
+                    transition={{ duration: 1 }}
                     // strokeWidth="1px" stroke="#606060"
                 />
                 {buttons}

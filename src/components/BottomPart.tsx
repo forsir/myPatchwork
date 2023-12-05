@@ -20,6 +20,7 @@ export function BottomPart({ player1, player2, currentPlayerId, menuData, gameDa
                 playerData={player1}
                 playerId="player1"
                 size={gameData.patchCellSize}
+                colors={gameData.colors}
                 dispatch={dispatch}
             />
             <Menu draggedData={menuData} dispatch={dispatch} />
@@ -28,6 +29,7 @@ export function BottomPart({ player1, player2, currentPlayerId, menuData, gameDa
                 playerData={player2}
                 playerId="player2"
                 size={gameData.patchCellSize}
+                colors={gameData.colors}
                 dispatch={dispatch}
             />
         </div>

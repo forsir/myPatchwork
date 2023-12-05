@@ -37,7 +37,7 @@ export function setPlayerSize(id: 'player1' | 'player2', x: number, y: number, s
 
 export function dragStart(id: string, position: { x: number; y: number }, state: Game): Game {
     if (state.dragged?.patch.id === id) {
-        return state;
+        return { ...state, overlaps: undefined };
     }
 
     const patch = state.patches.find((p) => p.id === id);
@@ -47,6 +47,7 @@ export function dragStart(id: string, position: { x: number; y: number }, state:
 
     return {
         ...state,
+        overlaps: undefined,
         dragged: {
             patch,
             filled: patch.filled,
@@ -111,6 +112,16 @@ export function dragEnd(id: string, position: { x: number; y: number; angle: num
     x = Math.round(x);
     y = Math.round(y);
 
+    let newOverlaps = undefined;
+    if (!canBePlaced) {
+        const currentPlayer = state[state.currentPlayerId];
+        newOverlaps = {
+            x: currentPlayer.blanketX,
+            y: currentPlayer.blanketY,
+            data: overlaps
+        } as { x: number; y: number; data: number[][] };
+    }
+
     const newDragged = {
         ...state.dragged,
         x,
@@ -120,21 +131,11 @@ export function dragEnd(id: string, position: { x: number; y: number; angle: num
         canBePlaced
     } as DraggedData;
 
-    if (state[state.currentPlayerId].overlaps === overlaps) {
-        return {
-            ...state,
-            dragged: newDragged
-        };
-    } else {
-        return {
-            ...state,
-            dragged: newDragged,
-            [state.currentPlayerId]: {
-                ...state[state.currentPlayerId],
-                overlaps: overlaps
-            }
-        };
-    }
+    return {
+        ...state,
+        overlaps: newOverlaps,
+        dragged: newDragged
+    };
 }
 
 export function rotateLeft(state: Game): Game {
@@ -224,14 +225,12 @@ export function skip(state: Game): Game {
     const oppositePlayer = state.currentPlayerId === 'player1' ? state.player2 : state.player1;
     const currentPlayer = state[state.currentPlayerId];
 
-    const timeIncome = oppositePlayer.time - currentPlayer.time + 1;
-
     let newState = {
         ...state,
         dragged: null
     } as Game;
 
-    newState = movePlayer(newState, 0, timeIncome);
+    newState = movePlayer(newState, 0, oppositePlayer.time);
 
     newState = setCurrentPlayer(newState);
 

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { useWindowSize } from '../hooks/useWindowSize';
 import { Action } from '../reducer/reducer';
-import { PlayerData, PlayerType } from '../reducer/types';
+import { Colors, PlayerData, PlayerType } from '../reducer/types';
 import { Patch } from './Patch';
 
 export type BlanketProps = {
@@ -12,10 +12,11 @@ export type BlanketProps = {
     playerId: PlayerType;
     currentPlayerId: PlayerType;
     size: number;
+    colors: Colors;
     dispatch: React.Dispatch<Action>;
 };
 
-export function Player({ playerId, playerData, currentPlayerId, size, dispatch }: BlanketProps) {
+export function Player({ playerId, playerData, currentPlayerId, size, colors, dispatch }: BlanketProps) {
     const reference = useRef<HTMLDivElement>(null);
 
     const [windowWidth, windowHeight] = useWindowSize();
@@ -38,27 +39,6 @@ export function Player({ playerId, playerData, currentPlayerId, size, dispatch }
         }
     }
 
-    const overlaps: any[] = [];
-    playerData.overlaps?.forEach((row, rowIndex) =>
-        row.forEach((value, columnIndex) => {
-            if (value === 1) {
-                overlaps.push(
-                    <div
-                        key={`${rowIndex}_${columnIndex}`}
-                        className="absolute z-50"
-                        style={{
-                            top: size * rowIndex,
-                            left: size * columnIndex,
-                            width: `${size}px`,
-                            backgroundColor: 'red',
-                            opacity: 0.5
-                        }}
-                    ></div>
-                );
-            }
-        })
-    );
-
     const patches = playerData.patches.map((patch, i) => (
         <Patch
             key={patch.id}
@@ -73,37 +53,36 @@ export function Player({ playerId, playerData, currentPlayerId, size, dispatch }
     ));
 
     return (
-        <motion.div
-            className="relative"
-            animate={{
-                filter: currentPlayerId === playerId ? undefined : 'grayscale(1) blur(2px)'
-            }}
-            transition={{ duration: 2 }}
-        >
-            {patches}
-            {overlaps}
-            <div className="absolute text-center bottom-full" style={{ width: `${size * 9}px` }}>
+        <motion.div className="relative">
+            <div className="absolute z-10 text-center bottom-full" style={{ width: `${size * 9}px` }}>
                 <span className={playerId === currentPlayerId ? 'font-bold' : 'font-semibold'}>
                     {{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}
                 </span>{' '}
-                {playerData.buttons} <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" />, income:{' '}
-                {playerData.income} <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" />
+                <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" /> {playerData.buttons}
             </div>
             <motion.div
-                ref={reference}
-                className="grid grid-cols-9 aspect-square grid-rows-9"
-                style={{
-                    width: `${size * 9}px`,
-                    backgroundColor: playerId === 'player1' ? 'rgb(95 158 208)' : 'rgb(208 177 95)'
+                animate={{
+                    filter: currentPlayerId === playerId ? undefined : 'grayscale(1) blur(2px)'
                 }}
-                animate={
-                    {
-                        // boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
-                    }
-                }
                 transition={{ duration: 2 }}
             >
-                {cells}
+                {patches}
+                <motion.div
+                    ref={reference}
+                    className="grid grid-cols-9 aspect-square grid-rows-9"
+                    style={{
+                        width: `${size * 9}px`,
+                        backgroundColor: playerId === 'player1' ? colors.player1 : colors.player2
+                    }}
+                    animate={
+                        {
+                            // boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
+                        }
+                    }
+                    transition={{ duration: 2 }}
+                >
+                    {cells}
+                </motion.div>
             </motion.div>
         </motion.div>
     );

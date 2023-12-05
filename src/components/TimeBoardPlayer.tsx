@@ -13,7 +13,7 @@ export type timeBoardPlayerProps = {
 export function TimeBoardPlayer({ position, cellSize, space, color }: timeBoardPlayerProps) {
     return (
         <motion.div
-            className="z-10 border border-black border-solid rounded-full"
+            className="z-30 border border-black border-solid rounded-full"
             style={{
                 backgroundColor: color,
                 width: `${cellSize - space * 2}px`,

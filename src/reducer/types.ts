@@ -1,6 +1,7 @@
 export type Game = {
     gameData: GameData;
     patches: PatchData[];
+    overlaps?: { x: number; y: number; data: number[][] };
     patchPositions: PointData[];
     timeBoardData: TimeBoardDataItem[];
     dragged: DraggedData | null;
@@ -63,7 +64,6 @@ export type PlayerData = {
     blanketY: number;
     blanketSize: number;
     filled: number[][];
-    overlaps?: number[][];
     patches: PatchData[];
     positions: PointData[];
     buttons: number;

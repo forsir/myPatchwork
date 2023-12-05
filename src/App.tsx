@@ -20,13 +20,14 @@ export default function App() {
             <TopPart
                 patchPositions={state.patchPositions}
                 patches={state.patches}
-                dispatch={dispatch}
-                dragged={state.dragged}
+                draggedData={state.dragged}
                 timeBoardData={state.timeBoardData}
                 gameData={state.gameData}
                 player1={state.player1}
                 player2={state.player2}
                 currentPlayerId={state.currentPlayerId}
+                overlaps={state.overlaps}
+                dispatch={dispatch}
             />
             <BottomPart
                 dispatch={dispatch}

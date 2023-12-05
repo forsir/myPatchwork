@@ -4,8 +4,8 @@ import { Game, PatchData } from './types';
 
 export const initial: Game = {
     gameData: {
-        timeCellSize: 30,
-        patchCellSize: 25,
+        timeCellSize: 20,
+        patchCellSize: 20,
         colors: {
             player1: '#889EAF',
             player2: '#BD74A0',
@@ -30,7 +30,7 @@ export const initial: Game = {
         filled: getFilled(),
         buttons: 5,
         income: 0,
-        time: 2
+        time: 1
     },
     player2: {
         blanketX: 0,
@@ -41,7 +41,7 @@ export const initial: Game = {
         filled: getFilled(),
         buttons: 5,
         income: 0,
-        time: 1
+        time: 2
     },
     currentPlayerId: 'player1'
 };

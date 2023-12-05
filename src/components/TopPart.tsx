@@ -7,11 +7,12 @@ export type TopPartProps = {
     patches: PatchData[];
     patchPositions: PointData[];
     timeBoardData: TimeBoardDataItem[];
-    dragged: DraggedData | null;
+    draggedData: DraggedData | null;
     gameData: GameData;
     player1: PlayerData;
     player2: PlayerData;
     currentPlayerId: 'player1' | 'player2';
+    overlaps: { x: number; y: number; data: number[][] } | undefined;
     dispatch: React.Dispatch<Action>;
 };
 
@@ -19,14 +20,39 @@ export function TopPart({
     patches,
     patchPositions,
     timeBoardData,
-    dragged,
+    draggedData,
     gameData,
     player1,
     player2,
     currentPlayerId,
+    overlaps,
     dispatch
 }: TopPartProps) {
     const currentPlayer = currentPlayerId === 'player1' ? player1 : player2;
+
+    const overlapElement: any[] = [];
+    overlaps?.data.forEach((row, rowIndex) =>
+        row.forEach((value, columnIndex) => {
+            if (value === 1) {
+                overlapElement.push(
+                    <div
+                        key={`${rowIndex}_${columnIndex}`}
+                        className="absolute z-60"
+                        style={{
+                            top: overlaps.y + gameData.patchCellSize * rowIndex,
+                            left: overlaps.x + gameData.patchCellSize * columnIndex,
+                            width: `${gameData.patchCellSize}px`,
+                            height: `${gameData.patchCellSize}px`,
+                            backgroundColor: 'red',
+                            opacity: 0.5,
+                            zIndex: 60,
+                            pointerEvents: 'none'
+                        }}
+                    ></div>
+                );
+            }
+        })
+    );
 
     return (
         <div className="relative" style={{ height: '50vh' }}>
@@ -44,14 +70,15 @@ export function TopPart({
                         data={patch}
                         drag={i < 3}
                         isPlaced={false}
-                        position={dragged?.patch.id === patch.id ? dragged : patchPositions[i]}
-                        onBlanket={dragged?.patch.id === patch.id ? dragged.onBlanket : false}
+                        position={draggedData?.patch.id === patch.id ? draggedData : patchPositions[i]}
+                        onBlanket={draggedData?.patch.id === patch.id ? draggedData.onBlanket : false}
                         cellSize={gameData.patchCellSize}
                         playerButtons={currentPlayer.buttons}
                         dispatch={dispatch}
                     />
                 );
             })}
+            {overlapElement}
         </div>
     );
 }

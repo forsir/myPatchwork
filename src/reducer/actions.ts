@@ -91,6 +91,7 @@ export function dragEnd(id: string, position: { x: number; y: number; angle: num
 
     let onBlanket = false;
     let canBePlaced = true;
+    let overlaps = null;
     if (
         x > player.blanketX - cellSizeHalf &&
         x < player.blanketX + player.blanketSize + cellSizeHalf - patchWidth &&
@@ -103,7 +104,8 @@ export function dragEnd(id: string, position: { x: number; y: number; angle: num
 
         const posX = Math.round((x - player.blanketX) / cellSize);
         const posY = Math.round((y - player.blanketY) / cellSize);
-        canBePlaced = checkFill(player.filled, state.dragged.filled, posX, posY);
+        overlaps = checkFill(player.filled, state.dragged.filled, posX, posY);
+        canBePlaced = overlaps == null;
     }
 
     x = Math.round(x);
@@ -118,10 +120,21 @@ export function dragEnd(id: string, position: { x: number; y: number; angle: num
         canBePlaced
     } as DraggedData;
 
-    return {
-        ...state,
-        dragged: newDragged
-    };
+    if (state[state.currentPlayerId].overlaps === overlaps) {
+        return {
+            ...state,
+            dragged: newDragged
+        };
+    } else {
+        return {
+            ...state,
+            dragged: newDragged,
+            [state.currentPlayerId]: {
+                ...state[state.currentPlayerId],
+                overlaps: overlaps
+            }
+        };
+    }
 }
 
 export function rotateLeft(state: Game): Game {
@@ -200,7 +213,7 @@ export function place(state: Game): Game {
         [state.currentPlayerId]: newPlayerData
     } as Game;
 
-    newState = movePlayer(newState, state.dragged.patch.time);
+    newState = movePlayer(newState, state.dragged.patch.time, 0);
 
     newState = setCurrentPlayer(newState);
 
@@ -218,7 +231,7 @@ export function skip(state: Game): Game {
         dragged: null
     } as Game;
 
-    newState = movePlayer(newState, timeIncome);
+    newState = movePlayer(newState, 0, timeIncome);
 
     newState = setCurrentPlayer(newState);
 

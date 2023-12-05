@@ -9,7 +9,7 @@ export function setCurrentPlayer(state: Game): Game {
     };
 }
 
-export function movePlayer(state: Game, incomeTime: number): Game {
+export function movePlayer(state: Game, incomeTime: number, toTime: number): Game {
     const currentPlayer = state[state.currentPlayerId];
     let newSmallPatch = false;
     let newTime = currentPlayer.time;
@@ -21,7 +21,9 @@ export function movePlayer(state: Game, incomeTime: number): Game {
         incomeTime--;
     }
 
-    for (let i = 0; i < incomeTime; i++) {
+    let counter = 0;
+    while (counter < incomeTime || newTime <= toTime) {
+        counter++;
         newTime++;
         if (state.timeBoardData[newTime].patch) {
             newSmallPatch = true;
@@ -40,6 +42,7 @@ export function movePlayer(state: Game, incomeTime: number): Game {
             };
         }
     }
+
     return {
         ...state,
         smallPatch: newSmallPatch,

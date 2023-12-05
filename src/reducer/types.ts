@@ -63,6 +63,7 @@ export type PlayerData = {
     blanketY: number;
     blanketSize: number;
     filled: number[][];
+    overlaps?: number[][];
     patches: PatchData[];
     positions: PointData[];
     buttons: number;

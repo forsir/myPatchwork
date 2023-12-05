@@ -13,10 +13,11 @@ export type PatchProps = {
     onBlanket: boolean;
     isPlaced: boolean;
     cellSize: number;
+    playerButtons?: number;
     dispatch: React.Dispatch<Action> | null;
 };
 
-export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, dispatch }: PatchProps) {
+export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, playerButtons, dispatch }: PatchProps) {
     const controls = useAnimation();
     useEffect(() => {
         let xt = 0;
@@ -47,6 +48,8 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, dis
 
     // isPlaced = true;
 
+    const cannotUse = drag && (playerButtons ?? 0) < data.price;
+
     const buttons: any[] = [];
     const scale = 0.7;
     data.filled.forEach((row, rowIndex) =>
@@ -57,9 +60,9 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, dis
                         key={`${rowIndex}_${columnIndex}`}
                         d="M2.5 0A.125.125 90 002.5 5 .125.125 90 002.5 0M2.5.625A.125.125 90 012.5 4.375.125.125 90 012.5.625M2.5.75A.125.125 90 002.5 4.25.125.125 90 002.5.75M1.875 1.625A.125.125 90 011.875 2.25.125.125 90 011.875 1.625M1.875 2.75A.125.125 90 011.875 3.375.125.125 90 011.875 2.75M3.125 2.75A.125.125 90 013.125 3.375.125.125 90 013.125 2.75M3.125 1.625A.125.125 90 013.125 2.25.125.125 90 013.125 1.625"
                         fill="#6F5084"
-                        stroke="#000000"
+                        stroke={cannotUse ? undefined : '#000000'}
                         strokeWidth="0.15"
-                        fillOpacity="0.7"
+                        fillOpacity={cannotUse ? '0.4' : '0.7'}
                         transform={`translate(${columnIndex * 5} ${rowIndex * 5}) scale(${scale}) translate(${
                             2.5 - scale * 2.5
                         } ${2.5 - scale * 2.5})`}
@@ -111,7 +114,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, dis
 
             <motion.svg
                 xmlns="http://www.w3.org/2000/svg"
-                drag={drag}
+                drag={drag && !cannotUse}
                 dragMomentum={false}
                 animate={controls}
                 viewBox={`0 0 ${data.width} ${data.height}`}
@@ -143,7 +146,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, dis
             >
                 <path
                     d={data.svg}
-                    fill={data.color}
+                    fill={cannotUse ? 'rgba(128, 128, 128, 0.5)' : data.color}
                     // strokeWidth="1px" stroke="#606060"
                 />
                 {buttons}

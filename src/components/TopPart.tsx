@@ -26,6 +26,8 @@ export function TopPart({
     currentPlayerId,
     dispatch
 }: TopPartProps) {
+    const currentPlayer = currentPlayerId === 'player1' ? player1 : player2;
+
     return (
         <div className="relative" style={{ height: '50vh' }}>
             <TimeBoard
@@ -45,6 +47,7 @@ export function TopPart({
                         position={dragged?.patch.id === patch.id ? dragged : patchPositions[i]}
                         onBlanket={dragged?.patch.id === patch.id ? dragged.onBlanket : false}
                         cellSize={gameData.patchCellSize}
+                        playerButtons={currentPlayer.buttons}
                         dispatch={dispatch}
                     />
                 );

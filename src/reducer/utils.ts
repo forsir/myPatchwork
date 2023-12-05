@@ -39,18 +39,22 @@ export function patchSize(dimension: number, size: number) {
     return (dimension / 5) * size;
 }
 
-export function checkFill(player: number[][], patch: number[][], x: number, y: number): boolean {
+export function checkFill(player: number[][], patch: number[][], x: number, y: number): null | number[][] {
+    let isSet = false;
+    const overlaps = Array.from({ length: 9 }, () => Array(9).fill(0));
+
     for (let rowIndex = 0; rowIndex < patch.length; rowIndex++) {
         const row = patch[rowIndex];
         for (let columnIndex = 0; columnIndex < row.length; columnIndex++) {
             const value = row[columnIndex];
             if (value > 0 && player[rowIndex + y][columnIndex + x] > 0) {
-                return false;
+                overlaps[rowIndex + y][columnIndex + x] = 1;
+                isSet = true;
             }
         }
     }
 
-    return true;
+    return isSet ? overlaps : null;
 }
 
 export function placeFill(player: number[][], patch: number[][], x: number, y: number): number[][] {

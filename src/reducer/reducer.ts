@@ -20,6 +20,7 @@ export const initial: Game = {
     patchPositions: [],
     timeBoardData: timeBoardData.map((d) => ({ ...d })),
     dragged: null,
+    smallPatch: false,
     player1: {
         blanketX: 0,
         blanketY: 0,

@@ -53,7 +53,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 0,
         left: 7,
-        button: true,
+        buttons: 2,
         type: 'normal',
         value: 7,
         borderWidth: '4px 4px 1px 1px'
@@ -96,7 +96,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 6,
         left: 7,
-        button: true,
+        buttons: 2,
         type: 'normal',
         value: 13,
         borderWidth: '1px 4px 1px 1px'
@@ -139,7 +139,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 7,
         left: 2,
-        button: true,
+        buttons: 2,
         type: 'normal',
         value: 19,
         borderWidth: '1px 1px 4px 1px'
@@ -190,7 +190,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 2,
         left: 0,
-        button: true,
+        buttons: 2,
         type: 'normal',
         value: 26,
         borderWidth: '1px 1px 1px 4px'
@@ -241,7 +241,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 1,
         left: 6,
-        button: true,
+        buttons: 2,
         type: 'normal',
         value: 33,
         borderWidth: '4px 4px 1px 1px'
@@ -292,7 +292,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 6,
         left: 4,
-        button: true,
+        buttons: 2,
         type: 'normal',
         value: 40,
         borderWidth: '1px 1px 4px 1px'
@@ -335,7 +335,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 3,
         left: 1,
-        button: true,
+        buttons: 2,
         type: 'normal',
         value: 46,
         borderWidth: '1px 1px 1px 4px'
@@ -386,7 +386,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 4,
         left: 5,
-        button: true,
+        buttons: 2,
         type: 'normal',
         value: 53,
         borderWidth: '1px 4px 1px 1px'
@@ -437,7 +437,7 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 3,
         left: 3,
-        button: true,
+        buttons: 2,
         type: 'end',
         value: 60,
         borderWidth: '4px 0px 0px 2px'

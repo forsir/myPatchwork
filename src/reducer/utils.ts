@@ -1,4 +1,4 @@
-import { PatchData } from './types';
+import { PatchData, PlayerType } from './types';
 
 export function rotateMatrixLeft(matrix: number[][]): number[][] {
     const numCols: number = matrix[0].length;
@@ -65,4 +65,14 @@ export function placeFill(player: number[][], patch: number[][], x: number, y: n
     );
 
     return newPlayer;
+}
+
+export function getNextPlayer(currentPlayerId: PlayerType, player1Time: number, player2Time: number): PlayerType {
+    if (player1Time < player2Time) {
+        return 'player1';
+    }
+    if (player2Time < player1Time) {
+        return 'player2';
+    }
+    return currentPlayerId;
 }

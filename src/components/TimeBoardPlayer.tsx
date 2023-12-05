@@ -24,7 +24,7 @@ export function TimeBoardPlayer({ position, cellSize, space, color }: timeBoardP
                 y: position.top * cellSize + space + 1,
                 x: position.left * cellSize + space + 1
             }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.5 }}
         ></motion.div>
     );
 }

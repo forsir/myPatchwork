@@ -6,8 +6,11 @@ export type Game = {
     dragged: DraggedData | null;
     player1: PlayerData;
     player2: PlayerData;
-    currentPlayerId: 'player1' | 'player2';
+    smallPatch: boolean;
+    currentPlayerId: PlayerType;
 };
+
+export type PlayerType = 'player1' | 'player2';
 
 export type Colors = {
     player1: string;
@@ -49,7 +52,7 @@ export type TimeBoardDataItem = {
     top: number;
     left: number;
     patch?: boolean;
-    button?: boolean;
+    buttons?: number;
     type: 'start' | 'normal' | 'patch' | 'end';
     value: number;
     borderWidth: string;

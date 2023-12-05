@@ -2,6 +2,7 @@ import { patchesData } from '../data/patchesData';
 import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
+import { movePlayer, setCurrentPlayer } from './stateActions';
 import { DraggedData, Game, PlayerData } from './types';
 import {
     checkFill,
@@ -187,32 +188,39 @@ export function place(state: Game): Game {
     newPlayerData.filled = placeFill(newPlayerData.filled, state.dragged.filled, posX, posY);
 
     newPlayerData.buttons -= state.dragged.patch.price;
-    newPlayerData.time += state.dragged.patch.time;
     newPlayerData.income += state.dragged.patch.income;
-
-    const newPlayer = state.currentPlayerId === 'player1' ? 'player2' : 'player1';
 
     const patchId = state.dragged.patch.id;
     const newPatches = removeElement(state.patches, patchId);
 
-    return {
+    let newState = {
         ...state,
         patches: newPatches,
         dragged: null,
-        [state.currentPlayerId]: newPlayerData,
-        currentPlayerId: newPlayer
-    };
+        [state.currentPlayerId]: newPlayerData
+    } as Game;
+
+    newState = movePlayer(newState, state.dragged.patch.time);
+
+    newState = setCurrentPlayer(newState);
+
+    return newState;
 }
 
 export function skip(state: Game): Game {
-    if (!state.dragged) {
-        return state;
-    }
+    const oppositePlayer = state.currentPlayerId === 'player1' ? state.player2 : state.player1;
+    const currentPlayer = state[state.currentPlayerId];
 
-    const newDragged = {
-        ...state.dragged,
-        filled: flipMatrix(state.dragged.filled),
-        flipped: !state.dragged?.flipped
-    } as DraggedData;
-    return { ...state, dragged: newDragged };
+    const timeIncome = oppositePlayer.time - currentPlayer.time + 1;
+
+    let newState = {
+        ...state,
+        dragged: null
+    } as Game;
+
+    newState = movePlayer(newState, timeIncome);
+
+    newState = setCurrentPlayer(newState);
+
+    return newState;
 }

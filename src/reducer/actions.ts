@@ -2,17 +2,9 @@ import { patchesData } from '../data/patchesData';
 import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
-import { movePlayer, setCurrentPlayer } from './stateActions';
-import { DraggedData, Game, PlayerData } from './types';
-import {
-    checkFill,
-    flipMatrix,
-    patchSize,
-    placeFill,
-    removeElement,
-    rotateMatrixLeft,
-    rotateMatrixRight
-} from './utils';
+import { checkPatchPlace, movePlayer, setCurrentPlayer } from './stateActions';
+import { Game, PlayerData } from './types';
+import { flipMatrix, placeFill, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
 
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
@@ -78,64 +70,7 @@ export function drag(id: string, position: { x: number; y: number }, state: Game
 }
 
 export function dragEnd(id: string, position: { x: number; y: number; angle: number }, state: Game): Game {
-    if (!state.dragged) {
-        return state;
-    }
-    let x = Math.round(position.x);
-    let y = Math.round(position.y);
-    const cellSize = state.gameData.patchCellSize;
-    const cellSizeHalf = cellSize / 2;
-    const patch = state.patches.find((p) => p.id === id)!;
-    const patchWidth = patchSize(position.angle % 180 === 0 ? patch.width : patch.height, cellSize);
-    const patchHeight = patchSize(position.angle % 180 === 0 ? patch.height : patch.width, cellSize);
-    const player = state[state.currentPlayerId];
-
-    let onBlanket = false;
-    let canBePlaced = true;
-    let overlaps = null;
-    if (
-        x > player.blanketX - cellSizeHalf &&
-        x < player.blanketX + player.blanketSize + cellSizeHalf - patchWidth &&
-        y > player.blanketY - cellSizeHalf &&
-        y < player.blanketY + player.blanketSize + cellSizeHalf - patchHeight
-    ) {
-        x = player.blanketX + Math.round((x - player.blanketX) / cellSize) * cellSize;
-        y = player.blanketY + Math.round((y - player.blanketY) / cellSize) * cellSize;
-        onBlanket = true;
-
-        const posX = Math.round((x - player.blanketX) / cellSize);
-        const posY = Math.round((y - player.blanketY) / cellSize);
-        overlaps = checkFill(player.filled, state.dragged.filled, posX, posY);
-        canBePlaced = overlaps == null;
-    }
-
-    x = Math.round(x);
-    y = Math.round(y);
-
-    let newOverlaps = undefined;
-    if (!canBePlaced) {
-        const currentPlayer = state[state.currentPlayerId];
-        newOverlaps = {
-            x: currentPlayer.blanketX,
-            y: currentPlayer.blanketY,
-            data: overlaps
-        } as { x: number; y: number; data: number[][] };
-    }
-
-    const newDragged = {
-        ...state.dragged,
-        x,
-        y,
-        isDragging: false,
-        onBlanket,
-        canBePlaced
-    } as DraggedData;
-
-    return {
-        ...state,
-        overlaps: newOverlaps,
-        dragged: newDragged
-    };
+    return checkPatchPlace(state, position);
 }
 
 export function rotateLeft(state: Game): Game {
@@ -143,12 +78,15 @@ export function rotateLeft(state: Game): Game {
         return state;
     }
 
-    const newDragged = {
-        ...state.dragged,
-        filled: rotateMatrixLeft(state.dragged.filled),
-        angle: (state.dragged?.angle ?? 0) + 90
-    } as DraggedData;
-    return { ...state, dragged: newDragged };
+    const x = state.dragged.x;
+    const y = state.dragged.y;
+
+    return checkPatchPlace(state, {
+        x: x,
+        y: y,
+        angle: state.dragged.angle + 90,
+        filled: rotateMatrixLeft(state.dragged.filled)
+    });
 }
 
 export function rotateRight(state: Game): Game {
@@ -156,12 +94,19 @@ export function rotateRight(state: Game): Game {
         return state;
     }
 
-    const newDragged = {
-        ...state.dragged,
-        filled: rotateMatrixRight(state.dragged.filled),
-        angle: (state.dragged?.angle ?? 0) - 90
-    } as DraggedData;
-    return { ...state, dragged: newDragged };
+    // const patch = state.dragged.patch;
+    const x = state.dragged.x; // - (state.dragged.angle % 180 === 0 ? patch.width / 2 : patch.height / 2);
+    const y = state.dragged.y; // - (state.dragged.angle % 180 === 0 ? patch.height / 2 : patch.width / 2);
+    // const x = state.dragged.x - (state.dragged.angle % 180 === 0 ? patch.height / 2 : patch.width / 2);
+    // const y = state.dragged.y - (state.dragged.angle % 180 === 0 ? patch.width / 2 : patch.height / 2);
+
+    return checkPatchPlace(state, {
+        x: x,
+        y: y,
+        angle: state.dragged.angle - 90,
+        flipped: state.dragged.flipped ?? false,
+        filled: rotateMatrixRight(state.dragged.filled)
+    });
 }
 
 export function flip(state: Game): Game {
@@ -169,12 +114,13 @@ export function flip(state: Game): Game {
         return state;
     }
 
-    const newDragged = {
-        ...state.dragged,
-        filled: flipMatrix(state.dragged.filled),
-        flipped: !state.dragged?.flipped
-    } as DraggedData;
-    return { ...state, dragged: newDragged };
+    return checkPatchPlace(state, {
+        x: state.dragged.x,
+        y: state.dragged.y,
+        angle: state.dragged.angle,
+        flipped: !state.dragged.flipped,
+        filled: flipMatrix(state.dragged.filled)
+    });
 }
 
 export function place(state: Game): Game {
@@ -223,7 +169,6 @@ export function place(state: Game): Game {
 
 export function skip(state: Game): Game {
     const oppositePlayer = state.currentPlayerId === 'player1' ? state.player2 : state.player1;
-    const currentPlayer = state[state.currentPlayerId];
 
     let newState = {
         ...state,

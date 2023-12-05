@@ -46,6 +46,7 @@ export type DraggedData = PointData & {
     patch: PatchData;
     onBlanket: boolean;
     canBePlaced: boolean;
+    flipped: boolean;
     filled: number[][];
 };
 

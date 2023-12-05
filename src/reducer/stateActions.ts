@@ -19,7 +19,6 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
 
     if (newTime < 2) {
         newTime = 2;
-        incomeTime--;
     }
 
     let counter = 0;
@@ -32,7 +31,7 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
             newTimeBoardData = newTimeBoardData ?? [...state.timeBoardData];
             newTimeBoardData[newTime] = { ...newTimeBoardData[newTime], patch: false };
             newTime++;
-        } else if (state.timeBoardData[newTime].patch == false) {
+        } else if (state.timeBoardData[newTime].patch === false) {
             newTime++;
         }
         if (state.timeBoardData[newTime].buttons) {
@@ -61,19 +60,23 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
     };
 }
 
-export function checkPatchPlace(state: Game, id: string, position: { x: number; y: number; angle: number }): Game {
+export function checkPatchPlace(
+    state: Game,
+    newData: { x: number; y: number; angle: number; flipped?: boolean; filled?: number[][] }
+): Game {
     if (!state.dragged) {
         return state;
     }
 
-    let x = Math.round(position.x);
-    let y = Math.round(position.y);
+    let x = Math.round(newData.x);
+    let y = Math.round(newData.y);
     const cellSize = state.gameData.patchCellSize;
     const cellSizeHalf = cellSize / 2;
-    const patch = state.patches.find((p) => p.id === id)!;
-    const patchWidth = patchSize(position.angle % 180 === 0 ? patch.width : patch.height, cellSize);
-    const patchHeight = patchSize(position.angle % 180 === 0 ? patch.height : patch.width, cellSize);
+    const patch = state.patches.find((p) => p.id === state.dragged!.patch.id)!;
+    const patchWidth = patchSize(newData.angle % 180 === 0 ? patch.width : patch.height, cellSize);
+    const patchHeight = patchSize(newData.angle % 180 === 0 ? patch.height : patch.width, cellSize);
     const player = state[state.currentPlayerId];
+    const newFilled = newData.filled ?? state.dragged.filled;
 
     let onBlanket = false;
     let canBePlaced = true;
@@ -86,16 +89,16 @@ export function checkPatchPlace(state: Game, id: string, position: { x: number; 
     ) {
         x = player.blanketX + Math.round((x - player.blanketX) / cellSize) * cellSize;
         y = player.blanketY + Math.round((y - player.blanketY) / cellSize) * cellSize;
+        x = Math.round(x);
+        y = Math.round(y);
+
         onBlanket = true;
 
         const posX = Math.round((x - player.blanketX) / cellSize);
         const posY = Math.round((y - player.blanketY) / cellSize);
-        overlaps = checkFill(player.filled, state.dragged.filled, posX, posY);
+        overlaps = checkFill(player.filled, newFilled, posX, posY);
         canBePlaced = overlaps == null;
     }
-
-    x = Math.round(x);
-    y = Math.round(y);
 
     let newOverlaps = undefined;
     if (!canBePlaced) {
@@ -114,11 +117,14 @@ export function checkPatchPlace(state: Game, id: string, position: { x: number; 
         isDragging: false,
         onBlanket,
         canBePlaced,
-        overlaps: newOverlaps
+        angle: newData.angle,
+        filled: newFilled,
+        flipped: newData.flipped ?? state.dragged.flipped
     } as DraggedData;
 
     return {
         ...state,
+        overlaps: newOverlaps,
         dragged: newDragged
     };
 }

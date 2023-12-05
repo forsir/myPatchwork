@@ -70,10 +70,12 @@ export function TopPart({
                         data={patch}
                         drag={i < 3}
                         isPlaced={false}
+                        isDragged={draggedData?.isDragging ?? false}
                         position={draggedData?.patch.id === patch.id ? draggedData : patchPositions[i]}
                         onBlanket={draggedData?.patch.id === patch.id ? draggedData.onBlanket : false}
                         cellSize={gameData.patchCellSize}
                         playerButtons={currentPlayer.buttons}
+                        tagBorder={player1.blanketY}
                         dispatch={dispatch}
                     />
                 );

@@ -12,12 +12,25 @@ export type PatchProps = {
     drag: boolean;
     onBlanket: boolean;
     isPlaced: boolean;
+    isDragged: boolean;
     cellSize: number;
     playerButtons?: number;
+    tagBorder: number;
     dispatch: React.Dispatch<Action> | null;
 };
 
-export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, playerButtons, dispatch }: PatchProps) {
+export function Patch({
+    data,
+    position,
+    drag,
+    onBlanket,
+    isPlaced,
+    isDragged,
+    cellSize,
+    playerButtons,
+    tagBorder,
+    dispatch
+}: PatchProps) {
     const controls = useAnimation();
     useEffect(() => {
         let xt = 0;
@@ -44,7 +57,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, pla
                 transition: onBlanket ? { duration: 0.1 } : { duration: 0.5 }
             });
         }
-    }, [position, isPlaced]);
+    }, [position, isPlaced, cellSize, data.height, data.width, onBlanket]);
 
     // isPlaced = true;
 
@@ -79,7 +92,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, pla
                     className="absolute z-50 p-1 text-sm border border-black bottom-1 bg-slate-100"
                     animate={{
                         x: position.x,
-                        y: position.y
+                        y: Math.min(tagBorder, position.y)
                     }}
                     transition={{
                         duration: 0.5
@@ -121,7 +134,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, cellSize, pla
                 width={`${patchSize(data.width, cellSize)}px`}
                 style={{
                     position: 'absolute',
-                    zIndex: isPlaced ? 20 : 40
+                    zIndex: isDragged ? 60 : isPlaced ? 20 : 40
                 }}
                 onDragStart={() => dispatch?.({ type: 'DRAG_STARTED', payload: { data, position } })}
                 // onDrag={(_, info) =>

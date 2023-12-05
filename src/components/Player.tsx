@@ -7,7 +7,7 @@ import { Action } from '../reducer/reducer';
 import { Colors, PlayerData, PlayerType } from '../reducer/types';
 import { Patch } from './Patch';
 
-export type BlanketProps = {
+export type PlayerProps = {
     playerData: PlayerData;
     playerId: PlayerType;
     currentPlayerId: PlayerType;
@@ -16,7 +16,7 @@ export type BlanketProps = {
     dispatch: React.Dispatch<Action>;
 };
 
-export function Player({ playerId, playerData, currentPlayerId, size, colors, dispatch }: BlanketProps) {
+export function Player({ playerId, playerData, currentPlayerId, size, colors, dispatch }: PlayerProps) {
     const reference = useRef<HTMLDivElement>(null);
 
     const [windowWidth, windowHeight] = useWindowSize();
@@ -46,8 +46,10 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
             dispatch={null}
             drag={false}
             isPlaced={true}
+            isDragged={false}
             onBlanket={false}
             position={playerData.positions[i]}
+            tagBorder={0}
             cellSize={size}
         />
     ));

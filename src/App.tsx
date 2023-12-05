@@ -12,7 +12,7 @@ export default function App() {
         const b = (main?.current?.clientHeight ?? 560) / 4;
         const x = (main?.current?.clientWidth ?? 1000) / 2;
         const y = (main?.current?.clientHeight ?? 540) / 4;
-        dispatch({ payload: { x, y, a, b }, type: 'INIT_GAME' });
+        dispatch({ type: 'INIT_GAME', payload: { x, y, a, b } });
     }, []);
 
     return (
@@ -33,6 +33,7 @@ export default function App() {
                 player1={state.player1}
                 player2={state.player2}
                 menuData={state.dragged}
+                gameData={state.gameData}
                 currentPlayerId={state.currentPlayerId}
             />
         </div>

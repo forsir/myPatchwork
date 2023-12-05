@@ -6,7 +6,6 @@ export const timeBoardData: TimeBoardDataItem[] = [
         left: 0,
         type: 'start',
         value: 0,
-
         borderWidth: '4px 1px 1px 4px'
     },
     {

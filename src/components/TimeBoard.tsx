@@ -24,19 +24,17 @@ export const TimeBoard = ({ gameData, timeBoardData, player1, player2, currentPl
         <div className="absolute" style={{ left: '300px', top: '100px' }}>
             <div className="relative grid grid-cols-8 aspect-square grid-rows-8">
                 <TimeBoardPlayer
-                    cellSize={gameData.cellSize}
+                    cellSize={gameData.timeCellSize}
                     color={gameData.colors.player1}
-                    left={timeBoardData[player1.time].left}
+                    position={timeBoardData[player1.time]}
                     space={playerSpace}
-                    top={timeBoardData[player1.time].top}
                 />
 
                 <TimeBoardPlayer
-                    cellSize={gameData.cellSize}
+                    cellSize={gameData.timeCellSize}
                     color={gameData.colors.player2}
-                    left={timeBoardData[player2.time].left}
+                    position={timeBoardData[player2.time]}
                     space={playerSpace}
-                    top={timeBoardData[player2.time].top}
                 />
 
                 {arrayGrid.map((row, i) =>
@@ -44,7 +42,7 @@ export const TimeBoard = ({ gameData, timeBoardData, player1, player2, currentPl
                         <TimeBoardItem
                             key={`${i}_${j}`}
                             data={item}
-                            size={gameData.cellSize}
+                            size={gameData.timeCellSize}
                             colors={gameData.colors}
                         />
                     ))

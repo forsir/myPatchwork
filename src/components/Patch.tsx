@@ -4,6 +4,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 import { Action } from '../reducer/reducer';
 import { PatchData, PointData } from '../reducer/types';
+import { patchSize } from '../reducer/utils';
 
 export type PatchProps = {
     data: PatchData;
@@ -11,10 +12,11 @@ export type PatchProps = {
     drag: boolean;
     onBlanket: boolean;
     isPlaced: boolean;
+    size: number;
     dispatch: React.Dispatch<Action> | null;
 };
 
-export function Patch({ data, position, drag, onBlanket, isPlaced, dispatch }: PatchProps) {
+export function Patch({ data, position, drag, onBlanket, isPlaced, size, dispatch }: PatchProps) {
     const controls = useAnimation();
     useEffect(() => {
         let xt = 0;
@@ -95,7 +97,7 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, dispatch }: P
                 //     rotate: { duration: 0.5 },
                 //     rotateY: { duration: 0.5 }
                 // }}
-                width={`${data.width * 4}px`}
+                width={`${patchSize(data.width, size)}px`}
                 style={{
                     position: 'absolute',
                     zIndex: 9
@@ -110,7 +112,14 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, dispatch }: P
                 onDragEnd={(_, info) => {
                     dispatch?.({
                         type: 'DRAG_ENDED',
-                        payload: { data, position: { x: position.x + info.offset.x, y: position.y + info.offset.y } }
+                        payload: {
+                            data,
+                            position: {
+                                x: position.x + info.offset.x,
+                                y: position.y + info.offset.y,
+                                angle: position.angle
+                            }
+                        }
                     });
                 }}
             >

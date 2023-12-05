@@ -3,7 +3,7 @@ import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
 import { DraggedData, Game, PlayerData } from './types';
-import { flipMatrix, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
+import { flipMatrix, patchSize, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
 
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
@@ -12,8 +12,13 @@ export function init(x: number, y: number, a: number, b: number, state: Game): G
     return { ...state, patches: patches, patchPositions: positions, timeBoardData: timeBoardDataItems };
 }
 
-export function setSizes(id: 'player1' | 'player2', x: number, y: number, state: Game): Game {
-    const player = { ...state[id], blanketX: Math.round(x), blanketY: Math.round(y) } as PlayerData;
+export function setPlayerSize(id: 'player1' | 'player2', x: number, y: number, state: Game): Game {
+    const player = {
+        ...state[id],
+        blanketX: Math.round(x),
+        blanketY: Math.round(y),
+        blanketSize: state.gameData.patchCellSize * 9
+    } as PlayerData;
 
     // const positions = createEllipse(x, y, a, b, patchesData.length);
 
@@ -61,20 +66,25 @@ export function drag(id: string, position: { x: number; y: number }, state: Game
     };
 }
 
-export function dragEnd(id: string, position: { x: number; y: number }, state: Game): Game {
+export function dragEnd(id: string, position: { x: number; y: number; angle: number }, state: Game): Game {
     let x = Math.round(position.x);
     let y = Math.round(position.y);
+    const cellSize = state.gameData.patchCellSize;
+    const cellSizeHalf = cellSize / 2;
+    const patch = state.patches.find((p) => p.id === id)!;
+    const patchWidth = patchSize(position.angle % 180 === 0 ? patch.width : patch.height, cellSize);
+    const patchHeight = patchSize(position.angle % 180 === 0 ? patch.height : patch.width, cellSize);
     const player = state[state.currentPlayerId];
 
     let onBlanket = false;
     if (
-        x > player.blanketX - 10 &&
-        x < player.blanketX + 180 &&
-        y > player.blanketY - 10 &&
-        y < player.blanketY + 180
+        x > player.blanketX - cellSizeHalf &&
+        x < player.blanketX + player.blanketSize + cellSizeHalf - patchWidth &&
+        y > player.blanketY - cellSizeHalf &&
+        y < player.blanketY + player.blanketSize + cellSizeHalf - patchHeight
     ) {
-        x = player.blanketX + Math.round((x - player.blanketX) / 20) * 20;
-        y = player.blanketY + Math.round((y - player.blanketY) / 20) * 20;
+        x = player.blanketX + Math.round((x - player.blanketX) / cellSize) * cellSize;
+        y = player.blanketY + Math.round((y - player.blanketY) / cellSize) * cellSize;
         onBlanket = true;
     }
 

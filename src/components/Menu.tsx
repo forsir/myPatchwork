@@ -44,7 +44,7 @@ export function Menu({ data, dispatch }: MenuProps) {
             <button
                 className="w-full px-4 py-2 m-1 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
                 onClick={() => dispatch({ type: 'SKIP' })}
-                disabled={!data?.onBlanket}
+                // disabled={!data?.onBlanket}
             >
                 Přeskočit tah
             </button>

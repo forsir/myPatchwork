@@ -1,10 +1,11 @@
 import { timeBoardData } from '../data/timeBoardData';
-import { drag, dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setSizes, skip } from './actions';
+import { drag, dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setPlayerSize, skip } from './actions';
 import { Game, PatchData } from './types';
 
 export const initial: Game = {
     gameData: {
-        cellSize: 30,
+        timeCellSize: 30,
+        patchCellSize: 25,
         colors: {
             player1: '#889EAF',
             player2: '#BD74A0',
@@ -22,6 +23,7 @@ export const initial: Game = {
     player1: {
         blanketX: 0,
         blanketY: 0,
+        blanketSize: 80,
         patches: [],
         positions: [],
         filled: getFilled(),
@@ -32,6 +34,7 @@ export const initial: Game = {
     player2: {
         blanketX: 0,
         blanketY: 0,
+        blanketSize: 80,
         patches: [],
         positions: [],
         filled: getFilled(),
@@ -48,11 +51,11 @@ function getFilled(): number[][] {
 
 export type Action =
     | { type: 'INIT_GAME'; payload: { x: number; y: number; a: number; b: number } }
-    | { type: 'SET_SIZES'; payload: { id: 'player1' | 'player2'; x: number; y: number } }
+    | { type: 'SET_PLAYER_SIZE'; payload: { id: 'player1' | 'player2'; x: number; y: number } }
     // | { type: 'MOVE_ITEM'; payload: { item: Item; point: Point } }
     | { type: 'DRAG_STARTED'; payload: { data: PatchData; position: { x: number; y: number } } }
     | { type: 'DRAG'; payload: { data: PatchData; position: { x: number; y: number } } }
-    | { type: 'DRAG_ENDED'; payload: { data: PatchData; position: { x: number; y: number } } }
+    | { type: 'DRAG_ENDED'; payload: { data: PatchData; position: { x: number; y: number; angle: number } } }
     | { type: 'ROTATE_LEFT' }
     | { type: 'ROTATE_RIGHT' }
     | { type: 'FLIP' }
@@ -66,9 +69,9 @@ export const reducer = (state: Game, action: Action): Game => {
             return init(x, y, a, b, state);
         }
 
-        case 'SET_SIZES': {
+        case 'SET_PLAYER_SIZE': {
             const { id, x, y } = action.payload;
-            return setSizes(id, x, y, state);
+            return setPlayerSize(id, x, y, state);
         }
 
         case 'DRAG_STARTED': {

@@ -8,13 +8,14 @@ import { PlayerData } from '../reducer/types';
 import { Patch } from './Patch';
 
 export type BlanketProps = {
-    dispatch: React.Dispatch<Action>;
     playerData: PlayerData;
     playerId: 'player1' | 'player2';
     currentPlayerId: 'player1' | 'player2';
+    size: number;
+    dispatch: React.Dispatch<Action>;
 };
 
-export function Blanket({ playerId, playerData, currentPlayerId, dispatch }: BlanketProps) {
+export function Player({ playerId, playerData, currentPlayerId, size, dispatch }: BlanketProps) {
     const reference = useRef<HTMLDivElement>(null);
 
     const [windowWidth, windowHeight] = useWindowSize();
@@ -22,7 +23,7 @@ export function Blanket({ playerId, playerData, currentPlayerId, dispatch }: Bla
     useEffect(() => {
         const rect = reference.current?.getBoundingClientRect();
         if (rect) {
-            dispatch({ type: 'SET_SIZES', payload: { id: playerId, x: rect.left, y: rect.top } });
+            dispatch({ type: 'SET_PLAYER_SIZE', payload: { id: playerId, x: rect.left, y: rect.top } });
         }
     }, [windowWidth, windowHeight]);
 
@@ -45,7 +46,8 @@ export function Blanket({ playerId, playerData, currentPlayerId, dispatch }: Bla
             drag={false}
             isPlaced={true}
             onBlanket={false}
-            position={{ ...playerData.positions[i] }}
+            position={playerData.positions[i]}
+            size={size}
         />
     ));
 
@@ -53,7 +55,6 @@ export function Blanket({ playerId, playerData, currentPlayerId, dispatch }: Bla
         <motion.div
             className="relative"
             animate={{
-                // boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
                 filter: currentPlayerId === playerId ? undefined : 'grayscale(1)'
             }}
             transition={{ duration: 2 }}
@@ -71,13 +72,14 @@ export function Blanket({ playerId, playerData, currentPlayerId, dispatch }: Bla
                 ref={reference}
                 className="grid grid-cols-9 aspect-square grid-rows-9"
                 style={{
-                    width: '180px',
+                    width: `${size * 9}px`,
                     backgroundColor: playerId === 'player1' ? 'rgb(95 158 208)' : 'rgb(208 177 95)'
                 }}
-                animate={{
-                    // boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
-                    filter: currentPlayerId === playerId ? undefined : 'grayscale(1)'
-                }}
+                animate={
+                    {
+                        // boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
+                    }
+                }
                 transition={{ duration: 2 }}
             >
                 {cells}

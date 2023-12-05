@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion';
 
 export type timeBoardPlayerProps = {
-    left: number;
-    top: number;
+    position: {
+        left: number;
+        top: number;
+    };
     cellSize: number;
     space: number;
     color: string;
 };
 
-export function TimeBoardPlayer({ left, top, cellSize, space, color }: timeBoardPlayerProps) {
+export function TimeBoardPlayer({ position, cellSize, space, color }: timeBoardPlayerProps) {
     return (
         <motion.div
             className="z-10 border border-black border-solid rounded-full"
@@ -19,8 +21,8 @@ export function TimeBoardPlayer({ left, top, cellSize, space, color }: timeBoard
             }}
             animate={{
                 position: 'absolute',
-                y: top * cellSize + space + 1,
-                x: left * cellSize + space + 1
+                y: position.top * cellSize + space + 1,
+                x: position.left * cellSize + space + 1
             }}
             transition={{ duration: 1 }}
         ></motion.div>

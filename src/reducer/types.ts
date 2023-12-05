@@ -20,7 +20,8 @@ export type Colors = {
 };
 
 export type GameData = {
-    cellSize: number;
+    patchCellSize: number;
+    timeCellSize: number;
     colors: Colors;
 };
 
@@ -56,6 +57,7 @@ export type TimeBoardDataItem = {
 export type PlayerData = {
     blanketX: number;
     blanketY: number;
+    blanketSize: number;
     filled: number[][];
     patches: PatchData[];
     positions: PointData[];

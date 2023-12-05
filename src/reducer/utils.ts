@@ -34,3 +34,7 @@ export function removeElement(patches: PatchData[], id: string | undefined) {
     const newP2 = patches.slice(index + 1);
     return [...newP2, ...newP1];
 }
+
+export function patchSize(dimension: number, size: number) {
+    return (dimension / 5) * size;
+}

@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
 import { GameData, PlayerData, TimeBoardDataItem } from '../reducer/types';
 import { TimeBoardItem } from './TimeBoardItem';
+import { TimeBoardPlayer } from './TimeBoardPlayer';
 
 export type timeBoardProps = {
     gameData: GameData;
@@ -15,43 +15,29 @@ export const TimeBoard = ({ gameData, timeBoardData, player1, player2, currentPl
 
     for (let i = 0; i < timeBoardData.length; i++) {
         const data = timeBoardData[i];
-        arrayGrid[data.left][data.top] = data;
+        arrayGrid[data.top][data.left] = data;
     }
 
     const playerSpace = 3;
 
     return (
         <div className="absolute" style={{ left: '300px', top: '100px' }}>
-            <div className="relative">
-                <motion.div
-                    className="z-10 border border-black border-solid rounded-full"
-                    style={{
-                        backgroundColor: gameData.colors.player1,
-                        width: `${gameData.cellSize - playerSpace}px`,
-                        height: `${gameData.cellSize - playerSpace}px`
-                    }}
-                    animate={{
-                        position: 'absolute',
-                        y: timeBoardData[player1.time].top * gameData.cellSize,
-                        x: timeBoardData[player1.time].left * gameData.cellSize
-                    }}
-                    transition={{ duration: 1 }}
-                ></motion.div>
+            <div className="relative grid grid-cols-8 aspect-square grid-rows-8">
+                <TimeBoardPlayer
+                    cellSize={gameData.cellSize}
+                    color={gameData.colors.player1}
+                    left={timeBoardData[player1.time].left}
+                    space={playerSpace}
+                    top={timeBoardData[player1.time].top}
+                />
 
-                <motion.div
-                    className="z-10 border border-black border-solid rounded-full"
-                    style={{
-                        backgroundColor: gameData.colors.player2,
-                        width: `${gameData.cellSize - playerSpace}px`,
-                        height: `${gameData.cellSize - playerSpace}px`
-                    }}
-                    animate={{
-                        position: 'absolute',
-                        y: timeBoardData[player2.time].top * gameData.cellSize,
-                        x: timeBoardData[player2.time].left * gameData.cellSize
-                    }}
-                    transition={{ duration: 1 }}
-                ></motion.div>
+                <TimeBoardPlayer
+                    cellSize={gameData.cellSize}
+                    color={gameData.colors.player2}
+                    left={timeBoardData[player2.time].left}
+                    space={playerSpace}
+                    top={timeBoardData[player2.time].top}
+                />
 
                 {arrayGrid.map((row, i) =>
                     row.map((item, j) => (

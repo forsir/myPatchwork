@@ -50,10 +50,22 @@ export function Blanket({ playerId, playerData, currentPlayerId, dispatch }: Bla
     ));
 
     return (
-        <div className="relative">
+        <motion.div
+            className="relative"
+            animate={{
+                // boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
+                filter: currentPlayerId === playerId ? undefined : 'grayscale(1)'
+            }}
+            transition={{ duration: 2 }}
+        >
             {patches}
-            <div className="absolute bottom-0 text-center">
-                <FontAwesomeIcon icon={faCircleDot} /> {playerData.buttons}
+            <div className="absolute text-center bottom-full">
+                <span className={playerId === currentPlayerId ? 'font-bold' : 'font-semibold'}>
+                    {{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}
+                </span>{' '}
+                {playerData.buttons}
+                <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" />, income: {playerData.income}{' '}
+                <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" />
             </div>
             <motion.div
                 ref={reference}
@@ -63,13 +75,13 @@ export function Blanket({ playerId, playerData, currentPlayerId, dispatch }: Bla
                     backgroundColor: playerId === 'player1' ? 'rgb(95 158 208)' : 'rgb(208 177 95)'
                 }}
                 animate={{
-                    boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
+                    // boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
                     filter: currentPlayerId === playerId ? undefined : 'grayscale(1)'
                 }}
                 transition={{ duration: 2 }}
             >
                 {cells}
             </motion.div>
-        </div>
+        </motion.div>
     );
 }

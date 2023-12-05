@@ -167,10 +167,9 @@ export function place(state: Game): Game {
         }
     ];
 
-    // console.log('place', state.dragged.x - playerData.blanketX, state.dragged.y - playerData.blanketY);
-
     playerData.buttons -= state.dragged.patch.price;
     playerData.time += state.dragged.patch.time;
+    playerData.income += state.dragged.patch.income;
 
     const player = state.currentPlayerId === 'player1' ? 'player2' : 'player1';
 

@@ -1,3 +1,4 @@
+import { timeBoardData } from '../data/timeBoardData';
 import { drag, dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setSizes, skip } from './actions';
 import { Game, PatchData } from './types';
 
@@ -16,7 +17,7 @@ export const initial: Game = {
     },
     patches: [],
     patchPositions: [],
-    timeBoardData: [],
+    timeBoardData: timeBoardData.map((d) => ({ ...d })),
     dragged: null,
     player1: {
         blanketX: 0,
@@ -26,7 +27,7 @@ export const initial: Game = {
         filled: getFilled(),
         buttons: 5,
         income: 0,
-        time: 0
+        time: 2
     },
     player2: {
         blanketX: 0,
@@ -36,7 +37,7 @@ export const initial: Game = {
         filled: getFilled(),
         buttons: 5,
         income: 0,
-        time: 0
+        time: 1
     },
     currentPlayerId: 'player1'
 };

@@ -22,7 +22,11 @@ export default function App() {
                 patches={state.patches}
                 dispatch={dispatch}
                 dragged={state.dragged}
-                scoreBoardData={state.scoreBoardData}
+                timeBoardData={state.timeBoardData}
+                gameData={state.gameData}
+                player1={state.player1}
+                player2={state.player2}
+                currentPlayerId={state.currentPlayerId}
             />
             <BottomPart
                 dispatch={dispatch}

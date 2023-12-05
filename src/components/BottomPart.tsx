@@ -22,7 +22,7 @@ export function BottomPart({ player1, player2, currentPlayerId, menuData, gameDa
                 size={gameData.patchCellSize}
                 dispatch={dispatch}
             />
-            <Menu data={menuData} dispatch={dispatch} />
+            <Menu draggedData={menuData} dispatch={dispatch} />
             <Player
                 currentPlayerId={currentPlayerId}
                 playerData={player2}

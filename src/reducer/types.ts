@@ -41,6 +41,7 @@ export type PatchData = {
 export type DraggedData = PointData & {
     patch: PatchData;
     onBlanket: boolean;
+    canBePlaced: boolean;
     filled: number[][];
 };
 

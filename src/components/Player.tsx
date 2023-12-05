@@ -32,7 +32,7 @@ export function Player({ playerId, playerData, currentPlayerId, size, dispatch }
         for (let j = 0; j < 9; j++) {
             cells.push(
                 <div key={`${i}_${j}`} className="text-xs aspect-square outline outline-1 outline-gray-500">
-                    {playerData.filled[i][j]}
+                    {/* {playerData.filled[i][j]} */}
                 </div>
             );
         }

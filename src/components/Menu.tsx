@@ -4,24 +4,24 @@ import { Action } from '../reducer/reducer';
 import { DraggedData } from '../reducer/types';
 
 export type MenuProps = {
-    data: DraggedData | null;
+    draggedData: DraggedData | null;
     dispatch: React.Dispatch<Action>;
 };
 
-export function Menu({ data, dispatch }: MenuProps) {
+export function Menu({ draggedData, dispatch }: MenuProps) {
     return (
         <div>
             <div className="flex flex-row">
                 <button
                     className="flex-1 px-4 py-2 m-1 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
                     onClick={() => dispatch({ type: 'ROTATE_LEFT' })}
-                    disabled={!data}
+                    disabled={!draggedData}
                 >
                     <FontAwesomeIcon icon={faArrowRotateLeft} />
                 </button>
                 <button
                     className="flex-1 px-4 py-2 m-1 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
-                    disabled={!data}
+                    disabled={!draggedData}
                     onClick={() => dispatch({ type: 'FLIP' })}
                 >
                     <FontAwesomeIcon icon={faRepeat} />
@@ -29,7 +29,7 @@ export function Menu({ data, dispatch }: MenuProps) {
                 <button
                     className="flex-1 px-4 py-2 m-1 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
                     onClick={() => dispatch({ type: 'ROTATE_RIGHT' })}
-                    disabled={!data}
+                    disabled={!draggedData}
                 >
                     <FontAwesomeIcon icon={faArrowRotateRight} />
                 </button>
@@ -37,7 +37,7 @@ export function Menu({ data, dispatch }: MenuProps) {
             <button
                 className="w-full px-4 py-2 m-1 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
                 onClick={() => dispatch({ type: 'PLACE' })}
-                disabled={!data?.onBlanket}
+                disabled={!draggedData?.onBlanket || !draggedData?.canBePlaced}
             >
                 Vzít látku
             </button>

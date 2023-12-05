@@ -70,20 +70,22 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, size, dispatc
             ) : (
                 ''
             )}
-
-            <div
-                className="absolute z-10 text-sm border border-black bg-slate-100"
-                style={{
-                    left: position.x,
-                    top: position.y
-                }}
-            >
-                {(position.filled ?? data.filled)
-                    .map((f) => f.join(' '))
-                    .map((r) => (
-                        <div>{r}</div>
-                    ))}
-            </div>
+            {/* Možná ještě budu potřebovat
+            {!isPlaced ? (
+                <div
+                    className="absolute z-10 text-sm border border-black bg-slate-100"
+                    style={{
+                        left: position.x,
+                        top: position.y
+                    }}
+                >
+                    {(position.filled ?? data.filled)
+                        .map((f) => f.join(' '))
+                        .map((r) => (
+                            <div>{r}</div>
+                        ))}
+                </div>
+            ) : undefined} */}
 
             <motion.svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -91,12 +93,6 @@ export function Patch({ data, position, drag, onBlanket, isPlaced, size, dispatc
                 dragMomentum={false}
                 animate={controls}
                 viewBox={`0 0 ${data.width} ${data.height}`}
-                // transition={{
-                //     x: { duration: 0.5 },
-                //     y: { duration: 0.5 },
-                //     rotate: { duration: 0.5 },
-                //     rotateY: { duration: 0.5 }
-                // }}
                 width={`${patchSize(data.width, size)}px`}
                 style={{
                     position: 'absolute',

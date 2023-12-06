@@ -70,6 +70,7 @@ export type PlayerData = {
     patches: PatchData[];
     positions: PointData[];
     buttons: number;
+    buttonsAnimation: number[];
     income: number;
     time: number;
 };

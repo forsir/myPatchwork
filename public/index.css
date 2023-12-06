@@ -584,6 +584,14 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
 .absolute {
   position: absolute;
 }
@@ -598,6 +606,18 @@ video {
 
 .bottom-full {
   bottom: 100%;
+}
+
+.left-0 {
+  left: 0px;
+}
+
+.top-0 {
+  top: 0px;
+}
+
+.bottom-0 {
+  bottom: 0px;
 }
 
 .z-10 {
@@ -618,6 +638,10 @@ video {
 
 .mt-20 {
   margin-top: 5rem;
+}
+
+.inline {
+  display: inline;
 }
 
 .flex {

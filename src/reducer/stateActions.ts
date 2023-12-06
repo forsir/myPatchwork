@@ -1,6 +1,6 @@
 import { smallPatch } from '../data/smallPatchData';
-import { DraggedData, Game, PlayerData } from './types';
-import { checkFill, getNextPlayer, patchSize } from './utils';
+import { DraggedData, Game } from './types';
+import { addScoreAnimation, checkFill, getNextPlayer, patchSize } from './utils';
 
 export function setCurrentPlayer(state: Game): Game {
     const newPlayer = getNextPlayer(
@@ -16,9 +16,9 @@ export function setCurrentPlayer(state: Game): Game {
 }
 
 export function movePlayer(state: Game, incomeTime: number, toTime: number): Game {
-    const currentPlayer = state[state.currentPlayerId];
+    const newCurrentPlayer = { ...state[state.currentPlayerId] };
     let newSmallPatch = 0;
-    let newTime = currentPlayer.time;
+    let newTime = newCurrentPlayer.time;
     let newTimeBoardData = null;
     let incomeButtons = 0;
     let timeButtons = 0;
@@ -41,7 +41,7 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
             newTime++;
         }
         if (state.timeBoardData[newTime].buttons) {
-            incomeButtons += currentPlayer.income;
+            incomeButtons += newCurrentPlayer.income;
             newTimeBoardData = newTimeBoardData ?? [...state.timeBoardData];
             newTimeBoardData[newTime] = {
                 ...newTimeBoardData[newTime],
@@ -50,15 +50,15 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
         }
     }
 
+    newCurrentPlayer.time = newTime;
+    addScoreAnimation(newCurrentPlayer, incomeButtons, toTime > 0 ? timeButtons : 0);
+    newCurrentPlayer.buttons = newCurrentPlayer.buttons + incomeButtons + (toTime > 0 ? timeButtons : 0);
+
     return {
         ...state,
         smallPatches: newSmallPatch,
         timeBoardData: newTimeBoardData ?? state.timeBoardData,
-        [state.currentPlayerId]: {
-            ...currentPlayer,
-            time: newTime,
-            buttons: currentPlayer.buttons + incomeButtons + (toTime > 0 ? timeButtons : 0)
-        } as PlayerData
+        [state.currentPlayerId]: newCurrentPlayer
     };
 }
 

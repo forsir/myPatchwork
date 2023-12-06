@@ -1,5 +1,4 @@
-import { smallPatch } from '../data/smallPatchData';
-import { PatchData, PlayerType } from './types';
+import { PatchData, PlayerData, PlayerType } from './types';
 
 export function rotateMatrixLeft(matrix: number[][]): number[][] {
     const numCols: number = matrix[0].length;
@@ -26,11 +25,11 @@ export const flipMatrix = (matrix: number[][]) => {
 };
 
 export function removeElement(patches: PatchData[], id: string | undefined) {
-    if (id === undefined || id === smallPatch.id) {
+    const index = patches.findIndex((f) => f.id === id);
+    if (index < 0) {
         return patches;
     }
 
-    const index = patches.findIndex((f) => f.id === id);
     const newP1 = patches.slice(0, index);
     const newP2 = patches.slice(index + 1);
     return [...newP2, ...newP1];
@@ -89,4 +88,8 @@ export function getNextPlayer(
         return 'player2';
     }
     return currentPlayerId;
+}
+
+export function addScoreAnimation(player: PlayerData, ...add: number[]) {
+    player.buttonsAnimation = [...player.buttonsAnimation, ...add.filter((a) => a !== 0)];
 }

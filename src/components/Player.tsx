@@ -24,7 +24,10 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
     useEffect(() => {
         const rect = reference.current?.getBoundingClientRect();
         if (rect) {
-            dispatch({ type: 'SET_PLAYER_SIZE', payload: { id: playerId, x: rect.left, y: rect.top } });
+            dispatch({
+                type: 'SET_PLAYER_SIZE',
+                payload: { id: playerId, x: rect.left, y: rect.top, windowWidth, windowHeight }
+            });
         }
     }, [windowWidth, windowHeight]);
 
@@ -61,6 +64,27 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
                     {{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}
                 </span>{' '}
                 <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" /> {playerData.buttons}
+                <span className="relative invisible inline">
+                    &nbsp;
+                    {playerData.buttonsAnimation?.map((value, index) => (
+                        <span key={index} className="relative">
+                            <motion.div
+                                key={index}
+                                className="absolute bottom-0 left-0 visible"
+                                initial={{ opacity: 1, fontSize: '1em' }}
+                                animate={{ opacity: 0, fontSize: '2em' }}
+                                transition={{ duration: 1 }}
+                                onAnimationComplete={() => {
+                                    console.log('animation completed');
+                                    dispatch({ type: 'ANIMATION_END', payload: { player: playerId, index } });
+                                }}
+                            >
+                                {(value >= 0 ? '+' : '') + value}
+                            </motion.div>
+                            {(value >= 0 ? '+' : '') + value}
+                        </span>
+                    ))}
+                </span>
             </div>
             <motion.div
                 animate={{

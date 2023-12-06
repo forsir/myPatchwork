@@ -1,5 +1,17 @@
 import { timeBoardData } from '../data/timeBoardData';
-import { drag, dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setPlayerSize, skip } from './actions';
+import {
+    animationEnd,
+    drag,
+    dragEnd,
+    dragStart,
+    flip,
+    init,
+    place,
+    rotateLeft,
+    rotateRight,
+    setPlayerSize,
+    skip
+} from './actions';
 import { Game, PatchData, PlayerType } from './types';
 
 export const initial: Game = {
@@ -31,6 +43,7 @@ export const initial: Game = {
         positions: [],
         filled: getFilled(),
         buttons: 5,
+        buttonsAnimation: [],
         income: 0,
         time: 1
     },
@@ -42,6 +55,7 @@ export const initial: Game = {
         positions: [],
         filled: getFilled(),
         buttons: 5,
+        buttonsAnimation: [],
         income: 0,
         time: 2
     },
@@ -54,7 +68,10 @@ function getFilled(): number[][] {
 
 export type Action =
     | { type: 'INIT_GAME'; payload: { x: number; y: number; a: number; b: number } }
-    | { type: 'SET_PLAYER_SIZE'; payload: { id: PlayerType; x: number; y: number } }
+    | {
+          type: 'SET_PLAYER_SIZE';
+          payload: { id: PlayerType; x: number; y: number; windowWidth: number; windowHeight: number };
+      }
     // | { type: 'MOVE_ITEM'; payload: { item: Item; point: Point } }
     | { type: 'DRAG_STARTED'; payload: { data: PatchData; position: { x: number; y: number } } }
     | { type: 'DRAG'; payload: { data: PatchData; position: { x: number; y: number } } }
@@ -63,7 +80,8 @@ export type Action =
     | { type: 'ROTATE_RIGHT' }
     | { type: 'FLIP' }
     | { type: 'SKIP' }
-    | { type: 'PLACE' };
+    | { type: 'PLACE' }
+    | { type: 'ANIMATION_END'; payload: { player: PlayerType; index: number } };
 
 export const reducer = (state: Game, action: Action): Game => {
     switch (action.type) {
@@ -73,8 +91,8 @@ export const reducer = (state: Game, action: Action): Game => {
         }
 
         case 'SET_PLAYER_SIZE': {
-            const { id, x, y } = action.payload;
-            return setPlayerSize(id, x, y, state);
+            const { id, x, y, windowWidth, windowHeight } = action.payload;
+            return setPlayerSize(id, x, y, windowWidth, windowHeight, state);
         }
 
         case 'DRAG_STARTED': {
@@ -110,6 +128,11 @@ export const reducer = (state: Game, action: Action): Game => {
 
         case 'SKIP': {
             return skip(state);
+        }
+
+        case 'ANIMATION_END': {
+            const { player, index } = action.payload;
+            return animationEnd(state, player, index);
         }
 
         default: {

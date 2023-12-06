@@ -5,7 +5,7 @@ import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
 import { checkPatchPlace, movePlayer, setCurrentPlayer } from './stateActions';
 import { Game, PlayerData, PlayerType } from './types';
-import { flipMatrix, placeFill, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
+import { addScoreAnimation, flipMatrix, placeFill, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
 
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
@@ -14,18 +14,39 @@ export function init(x: number, y: number, a: number, b: number, state: Game): G
     return { ...state, patches: patches, patchPositions: positions, timeBoardData: timeBoardDataItems };
 }
 
-export function setPlayerSize(id: PlayerType, x: number, y: number, state: Game): Game {
-    const player = {
+export function setPlayerSize(
+    id: PlayerType,
+    x: number,
+    y: number,
+    windowWidth: number,
+    windowHeight: number,
+    state: Game
+): Game {
+    const playerData = {
         ...state[id],
         blanketX: Math.round(x),
         blanketY: Math.round(y),
         blanketSize: state.gameData.patchCellSize * 9
     } as PlayerData;
 
-    // const positions = createEllipse(x, y, a, b, patchesData.length);
+    const cellSize = state.gameData.patchCellSize;
 
-    const positions = state.patchPositions;
-    return { ...state, [id]: player, patchPositions: positions };
+    const centerX = windowWidth / 2 - state.gameData.patchCellSize * 1.5;
+    const centerY = (windowHeight - state.gameData.patchCellSize * 9) / 2 - state.gameData.patchCellSize * 4;
+    const a = windowWidth / 2 - state.gameData.patchCellSize * 3;
+    const b = centerY;
+    const positions = createEllipse(centerX, centerY, a, b, patchesData.length);
+
+    return {
+        ...state,
+        gameData: {
+            ...state.gameData,
+            centerX: centerX,
+            centerY: centerY
+        },
+        [id]: playerData,
+        patchPositions: positions
+    };
 }
 
 export function dragStart(id: string, position: { x: number; y: number }, state: Game): Game {
@@ -157,6 +178,7 @@ export function place(state: Game): Game {
 
     newPlayerData.filled = placeFill(newPlayerData.filled, state.dragged.filled, posX, posY);
 
+    addScoreAnimation(newPlayerData, -state.dragged.patch.price);
     newPlayerData.buttons -= state.dragged.patch.price;
     newPlayerData.income += state.dragged.patch.income;
 
@@ -196,4 +218,17 @@ export function skip(state: Game): Game {
     newState = setCurrentPlayer(newState);
 
     return newState;
+}
+
+export function animationEnd(state: Game, player: PlayerType, index: number): Game {
+    const newButtonAnimation = [...(state[player].buttonsAnimation ?? [])];
+    newButtonAnimation.splice(index, 1);
+
+    return {
+        ...state,
+        [player]: {
+            ...state[player],
+            buttonsAnimation: newButtonAnimation
+        } as PlayerData
+    };
 }

@@ -150,7 +150,7 @@ export function checkWinner(state: Game): Game {
     newPlayer2Data.buttons -= player2Spaces * 2;
 
     const winner =
-        newPlayer1Data.buttons > newPlayer1Data.buttons
+        newPlayer1Data.buttons > newPlayer2Data.buttons
             ? 'player1'
             : newPlayer1Data.buttons < newPlayer2Data.buttons
             ? 'player2'

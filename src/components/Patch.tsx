@@ -57,7 +57,7 @@ export function Patch({
                 transition: onBlanket ? { duration: 0.1 } : { duration: 0.5 }
             });
         }
-    }, [position, isPlaced, cellSize, data.height, data.width, onBlanket]);
+    }, [position, isPlaced, cellSize, data.height, data.width, onBlanket, controls]);
 
     // isPlaced = true;
 

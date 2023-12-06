@@ -34,6 +34,7 @@ export const TimeBoard = ({ gameData, timeBoardData, player1, player2, currentPl
                     color={gameData.colors.player1}
                     position={timeBoardData[player1.time]}
                     space={playerSpace}
+                    isActive={currentPlayerId === 'player1'}
                 />
 
                 <TimeBoardPlayer
@@ -41,6 +42,7 @@ export const TimeBoard = ({ gameData, timeBoardData, player1, player2, currentPl
                     color={gameData.colors.player2}
                     position={timeBoardData[player2.time]}
                     space={playerSpace}
+                    isActive={currentPlayerId === 'player2'}
                 />
 
                 {arrayGrid.map((row, i) =>

@@ -39,13 +39,6 @@ export function setPlayerSize(
         blanketSize: state.gameData.patchCellSize * 9
     } as PlayerData;
 
-    const cellSize = state.gameData.patchCellSize;
-
-    // const centerX = windowWidth / 2 - state.gameData.patchCellSize * 1.5;
-    // const centerY = (windowHeight - state.gameData.patchCellSize * 9) / 2 - state.gameData.patchCellSize * 4;
-    // const a = windowWidth / 2 - state.gameData.patchCellSize * 3;
-    // const b = centerY;
-
     const centerX = windowWidth / 2;
     const centerY = windowHeight / 4;
     const a = windowWidth / 2;
@@ -95,7 +88,7 @@ export function dragStart(id: string, position: { x: number; y: number }, state:
     };
 }
 
-export function drag(id: string, position: { x: number; y: number }, state: Game): Game {
+export function drag(position: { x: number; y: number }, state: Game): Game {
     if (!state.dragged) {
         return state;
     }

@@ -1,11 +1,10 @@
-import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { useWindowSize } from '../hooks/useWindowSize';
 import { Action } from '../reducer/reducer';
 import { Colors, PlayerData, PlayerType } from '../reducer/types';
 import { Patch } from './Patch';
+import { PlayerHead } from './PlayerHead';
 
 export type PlayerProps = {
     playerData: PlayerData;
@@ -29,15 +28,13 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
                 payload: { id: playerId, x: rect.left, y: rect.top, windowWidth, windowHeight }
             });
         }
-    }, [windowWidth, windowHeight]);
+    }, [windowWidth, windowHeight, reference]);
 
     const cells = [];
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
             cells.push(
-                <div key={`${i}_${j}`} className="text-xs aspect-square outline outline-1 outline-gray-500">
-                    {/* {playerData.filled[i][j]} */}
-                </div>
+                <div key={`${i}_${j}`} className="text-xs aspect-square outline outline-1 outline-gray-500"></div>
             );
         }
     }
@@ -59,37 +56,19 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
 
     return (
         <motion.div className="relative">
-            <div className="absolute z-10 text-center bottom-full" style={{ width: `${size * 9}px` }}>
-                <span className="font-semibold">{{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}</span>{' '}
-                <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" /> {playerData.buttons}
-                <span className="relative invisible inline">
-                    &nbsp;
-                    <span className="absolute bottom-0 left-0">
-                        {playerData.buttonsAnimation?.map((value, index) => (
-                            <span key={index} className="relative">
-                                <motion.div
-                                    key={index}
-                                    className="absolute bottom-0 left-0 visible"
-                                    initial={{ opacity: 1, fontSize: '1em' }}
-                                    animate={{ opacity: 0, fontSize: '2em' }}
-                                    transition={{ duration: 2 }}
-                                    onAnimationComplete={() => {
-                                        dispatch({ type: 'ANIMATION_END', payload: { player: playerId, index } });
-                                    }}
-                                >
-                                    {(value >= 0 ? '+' : '') + value}
-                                </motion.div>
-                                {(value >= 0 ? '+' : '') + value}
-                            </span>
-                        ))}
-                    </span>
-                </span>
-            </div>
+            <PlayerHead
+                playerName={{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}
+                buttons={playerData.buttons}
+                buttonsAnimation={playerData.buttonsAnimation}
+                size={size}
+                playerId={playerId}
+                dispatch={dispatch}
+            />
             <motion.div
                 animate={{
                     filter: currentPlayerId === playerId ? undefined : 'grayscale(1) blur(2px)'
                 }}
-                transition={{ duration: 1 }}
+                transition={{ delay: 0.5, duration: 1 }}
             >
                 {patches}
                 <motion.div

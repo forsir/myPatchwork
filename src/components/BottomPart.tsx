@@ -23,7 +23,7 @@ export function BottomPart({
     dispatch
 }: BottomPartProps) {
     return (
-        <div className="flex flex-row justify-around w-full mt-20">
+        <div className="flex flex-row w-full mt-20 justify-evenly">
             <Player
                 currentPlayerId={currentPlayerId}
                 playerData={player1}

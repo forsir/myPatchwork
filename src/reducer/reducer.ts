@@ -103,7 +103,7 @@ export const reducer = (state: Game, action: Action): Game => {
 
         case 'DRAG': {
             const { data, position } = action.payload;
-            return drag(data.id, position, state);
+            return drag(position, state);
         }
 
         case 'DRAG_ENDED': {

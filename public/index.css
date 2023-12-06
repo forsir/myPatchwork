@@ -684,6 +684,10 @@ video {
   width: 40%;
 }
 
+.w-36 {
+  width: 9rem;
+}
+
 .w-full {
   width: 100%;
 }
@@ -775,8 +779,16 @@ video {
   justify-content: flex-end;
 }
 
+.justify-center {
+  justify-content: center;
+}
+
 .justify-around {
   justify-content: space-around;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
 }
 
 .overflow-hidden {
@@ -890,6 +902,10 @@ video {
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .text-center {

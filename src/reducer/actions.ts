@@ -1,9 +1,10 @@
 import { patchesData } from '../data/patchesData';
+import { smallPatch } from '../data/smallPatchData';
 import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
 import { checkPatchPlace, movePlayer, setCurrentPlayer } from './stateActions';
-import { Game, PlayerData } from './types';
+import { Game, PlayerData, PlayerType } from './types';
 import { flipMatrix, placeFill, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
 
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
@@ -13,7 +14,7 @@ export function init(x: number, y: number, a: number, b: number, state: Game): G
     return { ...state, patches: patches, patchPositions: positions, timeBoardData: timeBoardDataItems };
 }
 
-export function setPlayerSize(id: 'player1' | 'player2', x: number, y: number, state: Game): Game {
+export function setPlayerSize(id: PlayerType, x: number, y: number, state: Game): Game {
     const player = {
         ...state[id],
         blanketX: Math.round(x),
@@ -32,9 +33,13 @@ export function dragStart(id: string, position: { x: number; y: number }, state:
         return { ...state, overlaps: undefined };
     }
 
-    const patch = state.patches.find((p) => p.id === id);
+    let patch = state.patches.find((p) => p.id === id);
     if (!patch) {
-        return state;
+        if (state.smallPatches > 0) {
+            patch = smallPatch;
+        } else {
+            return state;
+        }
     }
 
     return {
@@ -131,6 +136,11 @@ export function place(state: Game): Game {
     const cellSize = state.gameData.patchCellSize;
     const newPlayerData = { ...state[state.currentPlayerId] };
 
+    if (state.dragged.patch.id === smallPatch.id) {
+        // prevent duplicate id
+        state.dragged.patch = { ...state.dragged.patch, id: '0__' + newPlayerData.patches.length };
+    }
+
     newPlayerData.patches = [...newPlayerData.patches, state.dragged.patch];
     newPlayerData.positions = [
         ...newPlayerData.positions,
@@ -153,10 +163,16 @@ export function place(state: Game): Game {
     const patchId = state.dragged.patch.id;
     const newPatches = removeElement(state.patches, patchId);
 
+    let newSmallPatches = state.smallPatches;
+    if (patchId === smallPatch.id) {
+        newSmallPatches--;
+    }
+
     let newState = {
         ...state,
         patches: newPatches,
         dragged: null,
+        smallPatches: newSmallPatches,
         [state.currentPlayerId]: newPlayerData
     } as Game;
 

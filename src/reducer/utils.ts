@@ -1,3 +1,4 @@
+import { smallPatch } from '../data/smallPatchData';
 import { PatchData, PlayerType } from './types';
 
 export function rotateMatrixLeft(matrix: number[][]): number[][] {
@@ -25,7 +26,7 @@ export const flipMatrix = (matrix: number[][]) => {
 };
 
 export function removeElement(patches: PatchData[], id: string | undefined) {
-    if (id === undefined) {
+    if (id === undefined || id === smallPatch.id) {
         return patches;
     }
 
@@ -71,7 +72,16 @@ export function placeFill(player: number[][], patch: number[][], x: number, y: n
     return newPlayer;
 }
 
-export function getNextPlayer(currentPlayerId: PlayerType, player1Time: number, player2Time: number): PlayerType {
+export function getNextPlayer(
+    currentPlayerId: PlayerType,
+    player1Time: number,
+    player2Time: number,
+    isSmallPatch: boolean
+): PlayerType {
+    if (isSmallPatch) {
+        return currentPlayerId;
+    }
+
     if (player1Time < player2Time) {
         return 'player1';
     }

@@ -1,8 +1,14 @@
+import { smallPatch } from '../data/smallPatchData';
 import { DraggedData, Game, PlayerData } from './types';
 import { checkFill, getNextPlayer, patchSize } from './utils';
 
 export function setCurrentPlayer(state: Game): Game {
-    const newPlayer = getNextPlayer(state.currentPlayerId, state.player1.time, state.player2.time);
+    const newPlayer = getNextPlayer(
+        state.currentPlayerId,
+        state.player1.time,
+        state.player2.time,
+        state.smallPatches > 0
+    );
     return {
         ...state,
         currentPlayerId: newPlayer
@@ -11,7 +17,7 @@ export function setCurrentPlayer(state: Game): Game {
 
 export function movePlayer(state: Game, incomeTime: number, toTime: number): Game {
     const currentPlayer = state[state.currentPlayerId];
-    let newSmallPatch = false;
+    let newSmallPatch = 0;
     let newTime = currentPlayer.time;
     let newTimeBoardData = null;
     let incomeButtons = 0;
@@ -23,11 +29,11 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
 
     let counter = 0;
     while (counter < incomeTime || newTime <= toTime) {
+        newTime = Math.min(62, newTime + 1);
         counter++;
-        newTime++;
         timeButtons++;
         if (state.timeBoardData[newTime].patch) {
-            newSmallPatch = true;
+            newSmallPatch++;
             newTimeBoardData = newTimeBoardData ?? [...state.timeBoardData];
             newTimeBoardData[newTime] = { ...newTimeBoardData[newTime], patch: false };
             newTime++;
@@ -44,13 +50,9 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
         }
     }
 
-    if (newTime > 62) {
-        newTime = 62;
-    }
-
     return {
         ...state,
-        smallPatch: newSmallPatch,
+        smallPatches: newSmallPatch,
         timeBoardData: newTimeBoardData ?? state.timeBoardData,
         [state.currentPlayerId]: {
             ...currentPlayer,
@@ -72,7 +74,10 @@ export function checkPatchPlace(
     let y = Math.round(newData.y);
     const cellSize = state.gameData.patchCellSize;
     const cellSizeHalf = cellSize / 2;
-    const patch = state.patches.find((p) => p.id === state.dragged!.patch.id)!;
+    const patch =
+        state.dragged!.patch.id === smallPatch.id
+            ? smallPatch
+            : state.patches.find((p) => p.id === state.dragged!.patch.id)!;
     const patchWidth = patchSize(newData.angle % 180 === 0 ? patch.width : patch.height, cellSize);
     const patchHeight = patchSize(newData.angle % 180 === 0 ? patch.height : patch.width, cellSize);
     const player = state[state.currentPlayerId];

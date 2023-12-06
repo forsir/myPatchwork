@@ -75,7 +75,8 @@ export const timeBoardData: TimeBoardDataItem[] = [
     {
         top: 3,
         left: 7,
-        type: 'normal',
+        type: 'patch',
+        patch: true,
         value: 10,
         borderWidth: '1px 4px 1px 1px'
     },

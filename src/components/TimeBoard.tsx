@@ -1,4 +1,4 @@
-import { GameData, PlayerData, TimeBoardDataItem } from '../reducer/types';
+import { GameData, PlayerData, PlayerType, TimeBoardDataItem } from '../reducer/types';
 import { TimeBoardItem } from './TimeBoardItem';
 import { TimeBoardPlayer } from './TimeBoardPlayer';
 
@@ -7,7 +7,7 @@ export type timeBoardProps = {
     timeBoardData: TimeBoardDataItem[];
     player1: PlayerData;
     player2: PlayerData;
-    currentPlayerId: 'player1' | 'player2';
+    currentPlayerId: PlayerType;
 };
 
 export const TimeBoard = ({ gameData, timeBoardData, player1, player2, currentPlayerId }: timeBoardProps) => {

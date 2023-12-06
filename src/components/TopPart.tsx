@@ -1,5 +1,14 @@
+import { smallPatch } from '../data/smallPatchData';
 import { Action } from '../reducer/reducer';
-import { DraggedData, GameData, PatchData, PlayerData, PointData, TimeBoardDataItem } from '../reducer/types';
+import {
+    DraggedData,
+    GameData,
+    PatchData,
+    PlayerData,
+    PlayerType,
+    PointData,
+    TimeBoardDataItem
+} from '../reducer/types';
 import { Patch } from './Patch';
 import { TimeBoard } from './TimeBoard';
 
@@ -11,8 +20,9 @@ export type TopPartProps = {
     gameData: GameData;
     player1: PlayerData;
     player2: PlayerData;
-    currentPlayerId: 'player1' | 'player2';
+    currentPlayerId: PlayerType;
     overlaps: { x: number; y: number; data: number[][] } | undefined;
+    isSmallPatch: boolean;
     dispatch: React.Dispatch<Action>;
 };
 
@@ -26,6 +36,7 @@ export function TopPart({
     player2,
     currentPlayerId,
     overlaps,
+    isSmallPatch,
     dispatch
 }: TopPartProps) {
     const currentPlayer = currentPlayerId === 'player1' ? player1 : player2;
@@ -68,18 +79,36 @@ export function TopPart({
                     <Patch
                         key={patch.id}
                         data={patch}
-                        drag={i < 3}
+                        drag={i < 3 && !isSmallPatch}
                         isPlaced={false}
                         isDragged={draggedData?.isDragging ?? false}
                         position={draggedData?.patch.id === patch.id ? draggedData : patchPositions[i]}
                         onBlanket={draggedData?.patch.id === patch.id ? draggedData.onBlanket : false}
                         cellSize={gameData.patchCellSize}
-                        playerButtons={currentPlayer.buttons}
+                        playersButtons={currentPlayer.buttons}
                         tagBorder={player1.blanketY}
                         dispatch={dispatch}
                     />
                 );
             })}
+            {isSmallPatch ? (
+                <Patch
+                    data={smallPatch}
+                    drag={true}
+                    isPlaced={false}
+                    isDragged={draggedData?.isDragging ?? false}
+                    position={
+                        draggedData?.patch.id === smallPatch.id
+                            ? draggedData
+                            : { x: gameData.centerX, y: gameData.centerY, angle: 0 }
+                    }
+                    onBlanket={draggedData?.patch.id === smallPatch.id ? draggedData.onBlanket : false}
+                    cellSize={gameData.patchCellSize}
+                    playersButtons={currentPlayer.buttons}
+                    tagBorder={player1.blanketY}
+                    dispatch={dispatch}
+                />
+            ) : undefined}
             {overlapElement}
         </div>
     );

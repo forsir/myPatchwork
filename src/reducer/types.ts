@@ -7,7 +7,7 @@ export type Game = {
     dragged: DraggedData | null;
     player1: PlayerData;
     player2: PlayerData;
-    smallPatch: boolean;
+    smallPatches: number;
     currentPlayerId: PlayerType;
 };
 
@@ -27,6 +27,8 @@ export type GameData = {
     patchCellSize: number;
     timeCellSize: number;
     colors: Colors;
+    centerX: number;
+    centerY: number;
 };
 
 export type PatchData = {

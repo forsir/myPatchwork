@@ -27,6 +27,7 @@ export default function App() {
                 player2={state.player2}
                 currentPlayerId={state.currentPlayerId}
                 overlaps={state.overlaps}
+                isSmallPatch={state.smallPatches > 0}
                 dispatch={dispatch}
             />
             <BottomPart
@@ -35,6 +36,7 @@ export default function App() {
                 player2={state.player2}
                 menuData={state.dragged}
                 gameData={state.gameData}
+                isSmallPatch={state.smallPatches > 0}
                 currentPlayerId={state.currentPlayerId}
             />
         </div>

@@ -1,18 +1,27 @@
 import { Action } from '../reducer/reducer';
-import { DraggedData, GameData, PlayerData } from '../reducer/types';
+import { DraggedData, GameData, PlayerData, PlayerType } from '../reducer/types';
 import { Menu } from './Menu';
 import { Player } from './Player';
 
 export type BottomPartProps = {
     player1: PlayerData;
     player2: PlayerData;
-    currentPlayerId: 'player1' | 'player2';
+    currentPlayerId: PlayerType;
     menuData: DraggedData | null;
     gameData: GameData;
+    isSmallPatch: boolean;
     dispatch: React.Dispatch<Action>;
 };
 
-export function BottomPart({ player1, player2, currentPlayerId, menuData, gameData, dispatch }: BottomPartProps) {
+export function BottomPart({
+    player1,
+    player2,
+    currentPlayerId,
+    menuData,
+    gameData,
+    isSmallPatch,
+    dispatch
+}: BottomPartProps) {
     return (
         <div className="flex flex-row justify-around w-full mt-20">
             <Player
@@ -23,7 +32,7 @@ export function BottomPart({ player1, player2, currentPlayerId, menuData, gameDa
                 colors={gameData.colors}
                 dispatch={dispatch}
             />
-            <Menu draggedData={menuData} dispatch={dispatch} />
+            <Menu draggedData={menuData} isSmallPatch={isSmallPatch} dispatch={dispatch} />
             <Player
                 currentPlayerId={currentPlayerId}
                 playerData={player2}

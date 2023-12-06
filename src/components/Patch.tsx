@@ -14,7 +14,7 @@ export type PatchProps = {
     isPlaced: boolean;
     isDragged: boolean;
     cellSize: number;
-    playerButtons?: number;
+    playersButtons?: number;
     tagBorder: number;
     dispatch: React.Dispatch<Action> | null;
 };
@@ -27,7 +27,7 @@ export function Patch({
     isPlaced,
     isDragged,
     cellSize,
-    playerButtons,
+    playersButtons: playerButtons,
     tagBorder,
     dispatch
 }: PatchProps) {

@@ -1,11 +1,13 @@
 import { timeBoardData } from '../data/timeBoardData';
 import { drag, dragEnd, dragStart, flip, init, place, rotateLeft, rotateRight, setPlayerSize, skip } from './actions';
-import { Game, PatchData } from './types';
+import { Game, PatchData, PlayerType } from './types';
 
 export const initial: Game = {
     gameData: {
         timeCellSize: 20,
         patchCellSize: 20,
+        centerX: 100,
+        centerY: 100,
         colors: {
             player1: '#889EAF',
             player2: '#BD74A0',
@@ -20,7 +22,7 @@ export const initial: Game = {
     patchPositions: [],
     timeBoardData: timeBoardData.map((d) => ({ ...d })),
     dragged: null,
-    smallPatch: false,
+    smallPatches: 0,
     player1: {
         blanketX: 0,
         blanketY: 0,
@@ -52,7 +54,7 @@ function getFilled(): number[][] {
 
 export type Action =
     | { type: 'INIT_GAME'; payload: { x: number; y: number; a: number; b: number } }
-    | { type: 'SET_PLAYER_SIZE'; payload: { id: 'player1' | 'player2'; x: number; y: number } }
+    | { type: 'SET_PLAYER_SIZE'; payload: { id: PlayerType; x: number; y: number } }
     // | { type: 'MOVE_ITEM'; payload: { item: Item; point: Point } }
     | { type: 'DRAG_STARTED'; payload: { data: PatchData; position: { x: number; y: number } } }
     | { type: 'DRAG'; payload: { data: PatchData; position: { x: number; y: number } } }

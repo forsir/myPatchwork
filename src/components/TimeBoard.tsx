@@ -21,7 +21,13 @@ export const TimeBoard = ({ gameData, timeBoardData, player1, player2, currentPl
     const playerSpace = 3;
 
     return (
-        <div className="absolute" style={{ left: '300px', top: '100px' }}>
+        <div
+            className="absolute"
+            style={{
+                left: `${gameData.centerX - gameData.timeCellSize * 4}px`,
+                top: `${gameData.centerY - gameData.timeCellSize * 4}px`
+            }}
+        >
             <div className="relative grid grid-cols-8 aspect-square grid-rows-8">
                 <TimeBoardPlayer
                     cellSize={gameData.timeCellSize}

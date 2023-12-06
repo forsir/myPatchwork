@@ -9,9 +9,19 @@ import { addScoreAnimation, flipMatrix, placeFill, removeElement, rotateMatrixLe
 
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
-    const positions = createEllipse(x, y, a, b, patches.length);
+    const positions = createEllipse(x - state.gameData.patchCellSize * 1.5, y, a, b, patches.length);
     const timeBoardDataItems = timeBoardData.map((d) => ({ ...d }));
-    return { ...state, patches: patches, patchPositions: positions, timeBoardData: timeBoardDataItems };
+    return {
+        ...state,
+        gameData: {
+            ...state.gameData,
+            centerX: x,
+            centerY: y
+        },
+        patches: patches,
+        patchPositions: positions,
+        timeBoardData: timeBoardDataItems
+    };
 }
 
 export function setPlayerSize(
@@ -31,11 +41,16 @@ export function setPlayerSize(
 
     const cellSize = state.gameData.patchCellSize;
 
-    const centerX = windowWidth / 2 - state.gameData.patchCellSize * 1.5;
-    const centerY = (windowHeight - state.gameData.patchCellSize * 9) / 2 - state.gameData.patchCellSize * 4;
-    const a = windowWidth / 2 - state.gameData.patchCellSize * 3;
-    const b = centerY;
-    const positions = createEllipse(centerX, centerY, a, b, patchesData.length);
+    // const centerX = windowWidth / 2 - state.gameData.patchCellSize * 1.5;
+    // const centerY = (windowHeight - state.gameData.patchCellSize * 9) / 2 - state.gameData.patchCellSize * 4;
+    // const a = windowWidth / 2 - state.gameData.patchCellSize * 3;
+    // const b = centerY;
+
+    const centerX = windowWidth / 2;
+    const centerY = windowHeight / 4;
+    const a = windowWidth / 2;
+    const b = windowHeight / 4;
+    const positions = createEllipse(centerX - state.gameData.patchCellSize * 1.5, centerY, a, b, patchesData.length);
 
     return {
         ...state,

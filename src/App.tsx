@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { BottomPart } from './components/BottomPart';
 import { TopPart } from './components/TopPart';
+import { Winner } from './components/Winner';
 import { initial, reducer } from './reducer/reducer';
 
 export default function App() {
@@ -16,7 +17,8 @@ export default function App() {
     }, []);
 
     return (
-        <div ref={main} className="relative w-screen h-screen overflow-hidden">
+        <div ref={main} className="relative w-screen h-screen overflow-hidden bg-orange-200">
+            {state.winner ? <Winner state={state} /> : undefined}
             <TopPart
                 patchPositions={state.patchPositions}
                 patches={state.patches}

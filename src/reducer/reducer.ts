@@ -27,6 +27,7 @@ export const initial: Game = {
             timeNormal: '#ffc43a',
             timeButton: '#ffc43b',
             timePatch: '#8B4513',
+            timePatchOut: '#dc9e2e',
             timeEnd: '#ff0000'
         }
     },

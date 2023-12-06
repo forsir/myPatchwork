@@ -3,7 +3,7 @@ import { smallPatch } from '../data/smallPatchData';
 import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
-import { checkPatchPlace, movePlayer, setCurrentPlayer } from './stateActions';
+import { checkPatchPlace, checkWinner, movePlayer, setCurrentPlayer } from './stateActions';
 import { Game, PlayerData, PlayerType } from './types';
 import { addScoreAnimation, flipMatrix, placeFill, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
 
@@ -217,6 +217,8 @@ export function place(state: Game): Game {
 
     newState = setCurrentPlayer(newState);
 
+    newState = checkWinner(newState);
+
     return newState;
 }
 
@@ -231,6 +233,8 @@ export function skip(state: Game): Game {
     newState = movePlayer(newState, 0, oppositePlayer.time);
 
     newState = setCurrentPlayer(newState);
+
+    newState = checkWinner(newState);
 
     return newState;
 }

@@ -60,37 +60,36 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
     return (
         <motion.div className="relative">
             <div className="absolute z-10 text-center bottom-full" style={{ width: `${size * 9}px` }}>
-                <span className={playerId === currentPlayerId ? 'font-bold' : 'font-semibold'}>
-                    {{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}
-                </span>{' '}
+                <span className="font-semibold">{{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}</span>{' '}
                 <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" /> {playerData.buttons}
                 <span className="relative invisible inline">
                     &nbsp;
-                    {playerData.buttonsAnimation?.map((value, index) => (
-                        <span key={index} className="relative">
-                            <motion.div
-                                key={index}
-                                className="absolute bottom-0 left-0 visible"
-                                initial={{ opacity: 1, fontSize: '1em' }}
-                                animate={{ opacity: 0, fontSize: '2em' }}
-                                transition={{ duration: 1 }}
-                                onAnimationComplete={() => {
-                                    console.log('animation completed');
-                                    dispatch({ type: 'ANIMATION_END', payload: { player: playerId, index } });
-                                }}
-                            >
+                    <span className="absolute bottom-0 left-0">
+                        {playerData.buttonsAnimation?.map((value, index) => (
+                            <span key={index} className="relative">
+                                <motion.div
+                                    key={index}
+                                    className="absolute bottom-0 left-0 visible"
+                                    initial={{ opacity: 1, fontSize: '1em' }}
+                                    animate={{ opacity: 0, fontSize: '2em' }}
+                                    transition={{ duration: 2 }}
+                                    onAnimationComplete={() => {
+                                        dispatch({ type: 'ANIMATION_END', payload: { player: playerId, index } });
+                                    }}
+                                >
+                                    {(value >= 0 ? '+' : '') + value}
+                                </motion.div>
                                 {(value >= 0 ? '+' : '') + value}
-                            </motion.div>
-                            {(value >= 0 ? '+' : '') + value}
-                        </span>
-                    ))}
+                            </span>
+                        ))}
+                    </span>
                 </span>
             </div>
             <motion.div
                 animate={{
                     filter: currentPlayerId === playerId ? undefined : 'grayscale(1) blur(2px)'
                 }}
-                transition={{ duration: 2 }}
+                transition={{ duration: 1 }}
             >
                 {patches}
                 <motion.div
@@ -98,13 +97,12 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
                     className="grid grid-cols-9 aspect-square grid-rows-9"
                     style={{
                         width: `${size * 9}px`,
-                        backgroundColor: playerId === 'player1' ? colors.player1 : colors.player2
+                        backgroundColor: playerId === 'player1' ? colors.player1 : colors.player2,
+                        boxShadow:
+                            currentPlayerId === playerId
+                                ? `0 0 50px 15px ${playerId === 'player1' ? colors.player1 : colors.player2}`
+                                : 'none'
                     }}
-                    animate={
-                        {
-                            // boxShadow: currentPlayerId === playerId ? '0 0 50px 15px #48abe0' : 'none',
-                        }
-                    }
                     transition={{ duration: 2 }}
                 >
                     {cells}

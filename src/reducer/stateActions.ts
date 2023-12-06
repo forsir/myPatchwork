@@ -1,6 +1,6 @@
 import { smallPatch } from '../data/smallPatchData';
 import { DraggedData, Game } from './types';
-import { addScoreAnimation, checkFill, getNextPlayer, patchSize } from './utils';
+import { addScoreAnimation, checkFill, computeEmptySpaces, getNextPlayer, patchSize } from './utils';
 
 export function setCurrentPlayer(state: Game): Game {
     const newPlayer = getNextPlayer(
@@ -131,5 +131,35 @@ export function checkPatchPlace(
         ...state,
         overlaps: newOverlaps,
         dragged: newDragged
+    };
+}
+
+export function checkWinner(state: Game): Game {
+    if (state.player1.time < 60 || state.player2.time < 60) {
+        return state;
+    }
+
+    const newPlayer1Data = { ...state.player1 };
+    const newPlayer2Data = { ...state.player2 };
+    const player1Spaces = computeEmptySpaces(newPlayer1Data.filled);
+    const player2Spaces = computeEmptySpaces(newPlayer2Data.filled);
+
+    addScoreAnimation(newPlayer1Data, -player1Spaces * 2);
+    newPlayer1Data.buttons -= player1Spaces * 2;
+    addScoreAnimation(newPlayer2Data, -player2Spaces * 2);
+    newPlayer2Data.buttons -= player2Spaces * 2;
+
+    const winner =
+        newPlayer1Data.buttons > newPlayer1Data.buttons
+            ? 'player1'
+            : newPlayer1Data.buttons < newPlayer2Data.buttons
+            ? 'player2'
+            : 'both';
+
+    return {
+        ...state,
+        player1: newPlayer1Data,
+        player2: newPlayer2Data,
+        winner
     };
 }

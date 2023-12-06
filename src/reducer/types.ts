@@ -9,6 +9,7 @@ export type Game = {
     player2: PlayerData;
     smallPatches: number;
     currentPlayerId: PlayerType;
+    winner?: PlayerType | 'both';
 };
 
 export type PlayerType = 'player1' | 'player2';
@@ -20,6 +21,7 @@ export type Colors = {
     timeNormal: string;
     timeButton: string;
     timePatch: string;
+    timePatchOut: string;
     timeEnd: string;
 };
 

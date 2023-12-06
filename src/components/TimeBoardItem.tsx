@@ -24,23 +24,25 @@ export function TimeBoardItem({ data, size, colors }: ScoreBoardItemProps) {
     }
 
     return (
-        <div
+        <motion.div
             className=""
             style={{
-                backgroundColor: getColor(data.type),
                 width: `${size}px`,
                 height: `${size}px`,
                 borderWidth: data.borderWidth,
                 borderStyle: 'solid',
                 borderColor: '#000000'
             }}
+            animate={{
+                backgroundColor: data.patch === false ? colors.timePatchOut : getColor(data.type)
+            }}
         >
-            {data.buttons ? (
+            {data.buttons !== undefined ? (
                 <motion.svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 42 42"
                     width={`${size - 4}px`}
-                    animate={{ opacity: data.buttons / 2 + 0.2 }}
+                    animate={{ opacity: data.buttons / 3 + 0.33 }}
                     transition={{ delay: 0.5, duration: 0.5 }}
                 >
                     <path
@@ -52,6 +54,6 @@ export function TimeBoardItem({ data, size, colors }: ScoreBoardItemProps) {
                 </motion.svg>
             ) : null}
             {/* {cell.text} */}
-        </div>
+        </motion.div>
     );
 }

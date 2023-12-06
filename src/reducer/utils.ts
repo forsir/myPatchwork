@@ -93,3 +93,17 @@ export function getNextPlayer(
 export function addScoreAnimation(player: PlayerData, ...add: number[]) {
     player.buttonsAnimation = [...player.buttonsAnimation, ...add.filter((a) => a !== 0)];
 }
+
+export function computeEmptySpaces(player: number[][]): number {
+    let spaces = 0;
+
+    player.forEach((row) =>
+        row.forEach((value) => {
+            if (value === 0) {
+                spaces++;
+            }
+        })
+    );
+
+    return spaces;
+}

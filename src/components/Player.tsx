@@ -57,7 +57,7 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
     return (
         <motion.div className="relative">
             <PlayerHead
-                playerName={{ player1: 'Hráč 1', player2: 'Hráč 2' }[playerId]}
+                playerName={{ player1: '1. hráč', player2: '2. hráč' }[playerId]}
                 buttons={playerData.buttons}
                 buttonsAnimation={playerData.buttonsAnimation}
                 size={size}

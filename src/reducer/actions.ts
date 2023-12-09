@@ -4,11 +4,10 @@ import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
 import { initial } from './initial';
-import { checkPatchPlace, checkWinner, movePlayer, setCurrentPlayer } from './stateActions';
+import { checkPatchPlace, checkWinner, movePlayer, setCurrentPlayer, stateCheck7x7 } from './stateActions';
 import { Game, PlayerData, PlayerType } from './types';
 import {
     addScoreAnimation,
-    check7x7,
     flipMatrixHorizontal,
     flipMatrixVertical,
     placeFill,
@@ -147,21 +146,7 @@ export function dragEnd(id: string, position: { x: number; y: number; angle: num
         return state;
     }
 
-    const currentPlayerId = state.currentPlayerId;
-    const newState = checkPatchPlace(state, position);
-    if (!newState.isSquare7x7Free) {
-        const isSquare = check7x7(newState[currentPlayerId].filled);
-        return {
-            ...newState,
-            isSquare7x7Free: !isSquare,
-            [currentPlayerId]: {
-                ...newState[currentPlayerId],
-                square7x7: isSquare
-            }
-        };
-    }
-
-    return newState;
+    return checkPatchPlace(state, position);
 }
 
 export function rotateLeft(state: Game): Game {
@@ -263,6 +248,8 @@ export function place(state: Game): Game {
         [state.currentPlayerId]: newPlayerData
     } as Game;
 
+    newState = stateCheck7x7(newState);
+
     newState = movePlayer(newState, state.dragged.patch.time, 0);
 
     newState = setCurrentPlayer(newState);
@@ -289,8 +276,9 @@ export function skip(state: Game): Game {
     return newState;
 }
 
-export function animationEnd(state: Game, player: PlayerType, index: number): Game {
+export function animationEnd(state: Game, player: PlayerType, value: number): Game {
     const newButtonAnimation = [...(state[player].buttonsAnimation ?? [])];
+    const index = newButtonAnimation.indexOf(value);
     newButtonAnimation.splice(index, 1);
 
     return {

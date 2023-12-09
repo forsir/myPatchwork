@@ -61,7 +61,7 @@ export function PlayerHead({ playerName, buttons, buttonsAnimation, size, player
                             animate={{ opacity: 0, fontSize: '2em' }}
                             transition={{ delay: 1, duration: 2 }}
                             onAnimationComplete={() => {
-                                dispatch({ type: 'ANIMATION_END', payload: { player: playerId, index } });
+                                dispatch({ type: 'ANIMATION_END', payload: { player: playerId, value } });
                             }}
                         >
                             {(value >= 0 ? '+' : '') + value}

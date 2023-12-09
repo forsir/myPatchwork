@@ -30,7 +30,7 @@ export type Action =
     | { type: 'FLIP' }
     | { type: 'SKIP' }
     | { type: 'PLACE' }
-    | { type: 'ANIMATION_END'; payload: { player: PlayerType; index: number } };
+    | { type: 'ANIMATION_END'; payload: { player: PlayerType; value: number } };
 
 export const reducer = (state: Game, action: Action): Game => {
     switch (action.type) {
@@ -84,8 +84,8 @@ export const reducer = (state: Game, action: Action): Game => {
         }
 
         case 'ANIMATION_END': {
-            const { player, index } = action.payload;
-            return animationEnd(state, player, index);
+            const { player, value } = action.payload;
+            return animationEnd(state, player, value);
         }
 
         default: {

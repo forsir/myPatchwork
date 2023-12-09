@@ -155,7 +155,7 @@ export function check7x7(player: number[][]): { x: number; y: number } | null {
                 }
             }
             if (total === 49) {
-                return { x: rowCounter, y: columnCounter };
+                return { x: columnCounter, y: rowCounter };
             }
         }
     }

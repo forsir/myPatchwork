@@ -1,6 +1,6 @@
 import { smallPatch } from '../data/smallPatchData';
 import { DraggedData, Game } from './types';
-import { addScoreAnimation, checkFill, computeEmptySpaces, getNextPlayer, patchSize } from './utils';
+import { addScoreAnimation, check7x7, checkFill, computeEmptySpaces, getNextPlayer, patchSize } from './utils';
 
 export function setCurrentPlayer(state: Game): Game {
     const newPlayer = getNextPlayer(
@@ -166,5 +166,23 @@ export function checkWinner(state: Game): Game {
         player1: newPlayer1Data,
         player2: newPlayer2Data,
         winner
+    };
+}
+
+export function stateCheck7x7(state: Game): Game {
+    if (!state.isSquare7x7Free) {
+        return state;
+    }
+
+    const currentPlayerId = state.currentPlayerId;
+    const square = check7x7(state[currentPlayerId].filled);
+
+    return {
+        ...state,
+        isSquare7x7Free: !square,
+        [currentPlayerId]: {
+            ...state[currentPlayerId],
+            square7x7: square
+        }
     };
 }

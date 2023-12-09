@@ -6,12 +6,21 @@ import { randomlyPatches } from '../hooks/randomlyPatches';
 import { initial } from './initial';
 import { checkPatchPlace, checkWinner, movePlayer, setCurrentPlayer } from './stateActions';
 import { Game, PlayerData, PlayerType } from './types';
-import { addScoreAnimation, flipMatrix, placeFill, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
+import {
+    addScoreAnimation,
+    check7x7,
+    flipMatrix,
+    placeFill,
+    removeElement,
+    rotateMatrixLeft,
+    rotateMatrixRight
+} from './utils';
 
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
     const positions = createEllipse(x - state.gameData.patchCellSize * 1.5, y, a, b, patches.length);
     const timeBoardDataItems = timeBoardData.map((d) => ({ ...d }));
+
     return {
         ...state,
         gameData: {
@@ -133,7 +142,25 @@ export function drag(position: { x: number; y: number }, state: Game): Game {
 }
 
 export function dragEnd(id: string, position: { x: number; y: number; angle: number }, state: Game): Game {
-    return checkPatchPlace(state, position);
+    if (state.dragged?.patch.id !== id) {
+        return state;
+    }
+
+    const currentPlayerId = state.currentPlayerId;
+    const newState = checkPatchPlace(state, position);
+    if (!newState.isSquare7x7Free) {
+        const isSquare = check7x7(newState[currentPlayerId].filled);
+        return {
+            ...newState,
+            isSquare7x7Free: !isSquare,
+            [currentPlayerId]: {
+                ...newState[currentPlayerId],
+                square7x7: isSquare
+            }
+        };
+    }
+
+    return newState;
 }
 
 export function rotateLeft(state: Game): Game {
@@ -157,11 +184,8 @@ export function rotateRight(state: Game): Game {
         return state;
     }
 
-    // const patch = state.dragged.patch;
-    const x = state.dragged.x; // - (state.dragged.angle % 180 === 0 ? patch.width / 2 : patch.height / 2);
-    const y = state.dragged.y; // - (state.dragged.angle % 180 === 0 ? patch.height / 2 : patch.width / 2);
-    // const x = state.dragged.x - (state.dragged.angle % 180 === 0 ? patch.height / 2 : patch.width / 2);
-    // const y = state.dragged.y - (state.dragged.angle % 180 === 0 ? patch.width / 2 : patch.height / 2);
+    const x = state.dragged.x;
+    const y = state.dragged.y;
 
     return checkPatchPlace(state, {
         x: x,

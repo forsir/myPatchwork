@@ -7,6 +7,7 @@ export type Game = {
     dragged: DraggedData | null;
     player1: PlayerData;
     player2: PlayerData;
+    isSquare7x7Free: boolean;
     smallPatches: number;
     currentPlayerId: PlayerType;
     winner?: PlayerType | 'both';
@@ -43,7 +44,7 @@ export type PatchData = {
     price: number;
     time: number;
     income: number;
-    filled: number[][];
+    filled: (0 | 1 | 2)[][];
 };
 
 export type DraggedData = PointData & {
@@ -51,7 +52,7 @@ export type DraggedData = PointData & {
     onBlanket: boolean;
     canBePlaced: boolean;
     flipped: boolean;
-    filled: number[][];
+    filled: (0 | 1 | 2)[][];
 };
 
 export type TimeBoardDataItem = {
@@ -68,9 +69,10 @@ export type PlayerData = {
     blanketX: number;
     blanketY: number;
     blanketSize: number;
-    filled: number[][];
+    filled: (0 | 1)[][];
     patches: PatchData[];
     positions: PointData[];
+    square7x7: { x: number; y: number } | null;
     buttons: number;
     buttonsAnimation: number[];
     income: number;

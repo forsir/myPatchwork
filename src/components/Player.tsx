@@ -15,7 +15,7 @@ export type PlayerProps = {
     dispatch: React.Dispatch<Action>;
 };
 
-export function Player({ playerId, playerData, currentPlayerId, size, colors, dispatch }: PlayerProps) {
+export function Player({ playerId, playerData, currentPlayerId, size: cellSize, colors, dispatch }: PlayerProps) {
     const reference = useRef<HTMLDivElement>(null);
 
     const [windowWidth, windowHeight] = useWindowSize();
@@ -50,7 +50,7 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
             onBlanket={false}
             position={playerData.positions[i]}
             tagBorder={0}
-            cellSize={size}
+            cellSize={cellSize}
             isSmall={false}
         />
     ));
@@ -61,7 +61,7 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
                 playerName={{ player1: '1. hráč', player2: '2. hráč' }[playerId]}
                 buttons={playerData.buttons}
                 buttonsAnimation={playerData.buttonsAnimation}
-                size={size}
+                size={cellSize}
                 playerId={playerId}
                 dispatch={dispatch}
             />
@@ -76,7 +76,7 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
                     ref={reference}
                     className="grid grid-cols-9 aspect-square grid-rows-9"
                     style={{
-                        width: `${size * 9}px`,
+                        width: `${cellSize * 9}px`,
                         backgroundColor: playerId === 'player1' ? colors.player1 : colors.player2,
                         boxShadow:
                             currentPlayerId === playerId
@@ -88,6 +88,18 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
                     {cells}
                 </motion.div>
             </motion.div>
+            {playerData.square7x7 ? (
+                <div
+                    className="absolute border-2 border-dashed"
+                    style={{
+                        left: playerData.square7x7.x * cellSize,
+                        top: playerData.square7x7.y * cellSize,
+                        width: 7 * cellSize,
+                        height: 7 * cellSize,
+                        opacity: 0.7
+                    }}
+                ></div>
+            ) : undefined}
         </motion.div>
     );
 }

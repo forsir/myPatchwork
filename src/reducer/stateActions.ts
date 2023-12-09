@@ -143,11 +143,16 @@ export function checkWinner(state: Game): Game {
     const newPlayer2Data = { ...state.player2 };
     const player1Spaces = computeEmptySpaces(newPlayer1Data.filled);
     const player2Spaces = computeEmptySpaces(newPlayer2Data.filled);
+    const player1Square = state.player1.square7x7 ? 7 : 0;
+    const player2Square = state.player2.square7x7 ? 7 : 0;
 
-    addScoreAnimation(newPlayer1Data, -player1Spaces * 2);
+    addScoreAnimation(newPlayer1Data, -player1Spaces * 2, player1Square);
     newPlayer1Data.buttons -= player1Spaces * 2;
-    addScoreAnimation(newPlayer2Data, -player2Spaces * 2);
+    newPlayer1Data.buttons += player1Square;
+
+    addScoreAnimation(newPlayer2Data, -player2Spaces * 2, player2Square);
     newPlayer2Data.buttons -= player2Spaces * 2;
+    newPlayer2Data.buttons += player2Square;
 
     const winner =
         newPlayer1Data.buttons > newPlayer2Data.buttons

@@ -1,7 +1,7 @@
 import { timeBoardData } from '../data/timeBoardData';
 import { Game } from './types';
 
-function getFilled(): number[][] {
+function getFilled(): (0 | 1)[][] {
     return Array.from({ length: 9 }, () => Array(9).fill(0));
 }
 
@@ -27,12 +27,14 @@ export const initial: Game = {
     timeBoardData: timeBoardData.map((d) => ({ ...d })),
     dragged: null,
     smallPatches: 0,
+    isSquare7x7Free: true,
     player1: {
         blanketX: 0,
         blanketY: 0,
         blanketSize: 80,
         patches: [],
         positions: [],
+        square7x7: null,
         filled: getFilled(),
         buttons: 5,
         buttonsAnimation: [],
@@ -45,6 +47,7 @@ export const initial: Game = {
         blanketSize: 80,
         patches: [],
         positions: [],
+        square7x7: null,
         filled: getFilled(),
         buttons: 5,
         buttonsAnimation: [],

@@ -156,7 +156,8 @@ export function Patch({
                     d={data.svg}
                     fill={cannotUse ? 'rgba(128, 128, 128, 0.5)' : data.color}
                     transition={{ duration: 1 }}
-                    // strokeWidth="1px" stroke="#606060"
+                    strokeWidth="0.5px"
+                    stroke="#606060"
                 />
                 {buttons}
                 {isPlaced ? (

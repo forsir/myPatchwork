@@ -785,6 +785,10 @@ video {
   border-style: solid;
 }
 
+.border-dashed {
+  border-style: dashed;
+}
+
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));

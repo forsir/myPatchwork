@@ -1,4 +1,6 @@
-export const smallPatch = {
+import { PatchData } from '../reducer/types';
+
+export const smallPatch: PatchData = {
     id: '0',
     svg: 'M0 0 5 0 5 5 0 5 0 0',
     width: 5,

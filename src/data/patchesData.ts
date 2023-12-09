@@ -1,4 +1,6 @@
-export const patchesData = [
+import { PatchData } from '../reducer/types';
+
+export const patchesData: PatchData[] = [
     {
         id: '0_0',
         svg: 'M 0 0 L 5 0 L 5 5 L 5 10 L 0 10 L 0 0',

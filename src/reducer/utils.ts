@@ -57,13 +57,13 @@ export function checkFill(player: number[][], patch: number[][], x: number, y: n
     return isSet ? overlaps : null;
 }
 
-export function placeFill(player: number[][], patch: number[][], x: number, y: number): number[][] {
-    const newPlayer = player.map((r) => r.map((c) => c));
+export function placeFill(player: number[][], patch: number[][], x: number, y: number): (0 | 1)[][] {
+    const newPlayer = player.map((r) => r.map((c) => c)) as (0 | 1)[][];
 
     patch.forEach((row, rowIndex) =>
         row.forEach((value, columnIndex) => {
             if (value > 0) {
-                newPlayer[rowIndex + y][columnIndex + x] = value;
+                newPlayer[rowIndex + y][columnIndex + x] = value > 0 ? 1 : 0;
             }
         })
     );
@@ -106,4 +106,55 @@ export function computeEmptySpaces(player: number[][]): number {
     );
 
     return spaces;
+}
+
+export function check7x7(player: number[][]): { x: number; y: number } | null {
+    let rowSum = new Array(9).fill(0);
+    let colSum = new Array(9).fill(0);
+
+    let rowStart = 0;
+    let rowEnd = 2;
+    let colStart = 0;
+    let colEnd = 2;
+
+    for (let counter = 0; counter < 9; counter++) {
+        rowSum[counter] = player[counter].reduce((p, c) => p + c, 0);
+
+        if (rowSum[counter] < 7) {
+            if (counter <= 2) {
+                rowStart = counter + 1;
+            } else if (counter >= 7) {
+                rowEnd = Math.min(counter - 7, rowEnd);
+            } else {
+                return null;
+            }
+        }
+
+        colSum[counter] = player.reduce((p, c) => p + c[counter], 0);
+        if (colSum[counter] < 7) {
+            if (counter <= 2) {
+                colStart = counter + 1;
+            } else if (counter >= 7) {
+                colEnd = Math.min(counter - 7, colEnd);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    for (let rowCounter = rowStart; rowCounter <= rowEnd; rowCounter++) {
+        for (let columnCounter = colStart; columnCounter <= colEnd; columnCounter++) {
+            let total = 0;
+            for (let row = rowCounter; row < rowCounter + 7; row++) {
+                for (let column = columnCounter; column < columnCounter + 7; column++) {
+                    total += player[row][column];
+                }
+            }
+            if (total === 49) {
+                return { x: rowCounter, y: columnCounter };
+            }
+        }
+    }
+
+    return null;
 }

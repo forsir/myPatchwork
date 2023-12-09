@@ -10,7 +10,7 @@ export default function App() {
     const main = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const a = (main?.current?.clientWidth ?? 800) / 2;
+        const a = (main?.current?.clientWidth ?? 800) / 2.5;
         const b = (main?.current?.clientHeight ?? 560) / 4;
         const x = (main?.current?.clientWidth ?? 1000) / 2;
         const y = (main?.current?.clientHeight ?? 540) / 4;

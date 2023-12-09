@@ -28,6 +28,7 @@ export const initial: Game = {
     dragged: null,
     smallPatches: 0,
     isSquare7x7Free: true,
+    overlaps: null,
     player1: {
         blanketX: 0,
         blanketY: 0,
@@ -54,5 +55,6 @@ export const initial: Game = {
         income: 0,
         time: 2
     },
-    currentPlayerId: 'player1'
+    currentPlayerId: 'player1',
+    winner: null
 };

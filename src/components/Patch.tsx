@@ -61,8 +61,6 @@ export function Patch({
         }
     }, [position, isPlaced, cellSize, data.height, data.width, onBlanket, controls]);
 
-    // isPlaced = true;
-
     const cannotUse = isSmall || (drag && (playerButtons ?? 0) < data.price);
 
     const buttons: any[] = [];

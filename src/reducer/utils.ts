@@ -43,9 +43,9 @@ export function patchSize(dimension: number, size: number) {
     return (dimension / 5) * size;
 }
 
-export function checkFill(player: number[][], patch: number[][], x: number, y: number): null | number[][] {
+export function checkFill(player: number[][], patch: number[][], x: number, y: number): null | (0 | 1)[][] {
     let isSet = false;
-    const overlaps = Array.from({ length: 9 }, () => Array(9).fill(0));
+    const overlaps: (0 | 1)[][] = Array.from({ length: 9 }, () => Array(9).fill(0));
 
     for (let rowIndex = 0; rowIndex < patch.length; rowIndex++) {
         const row = patch[rowIndex];

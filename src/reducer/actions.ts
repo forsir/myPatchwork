@@ -4,17 +4,9 @@ import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
 import { initial } from './initial';
-import { checkPatchPlace, checkWinner, movePlayer, setCurrentPlayer, stateCheck7x7 } from './stateActions';
+import { checkPatchPlace, checkWinner, movePlayer, setCurrentPlayer, stateCheck7x7, statePlace } from './stateActions';
 import { Game, PlayerData, PlayerType } from './types';
-import {
-    addScoreAnimation,
-    flipMatrixHorizontal,
-    flipMatrixVertical,
-    placeFill,
-    removeElement,
-    rotateMatrixLeft,
-    rotateMatrixRight
-} from './utils';
+import { flipMatrixHorizontal, flipMatrixVertical, rotateMatrixLeft, rotateMatrixRight } from './utils';
 
 export function init(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
@@ -58,7 +50,7 @@ export function newGame(state: Game): Game {
         player2: player2Data,
         smallPatches: 0,
         timeBoardData: timeBoardData.map((d) => ({ ...d })),
-        winner: undefined
+        winner: null
     };
 }
 
@@ -97,7 +89,7 @@ export function setPlayerSize(
 
 export function dragStart(id: string, position: { x: number; y: number }, state: Game): Game {
     if (state.dragged?.patch.id === id) {
-        return { ...state, overlaps: undefined };
+        return { ...state, overlaps: null };
     }
 
     let patch = state.patches.find((p) => p.id === id);
@@ -111,7 +103,7 @@ export function dragStart(id: string, position: { x: number; y: number }, state:
 
     return {
         ...state,
-        overlaps: undefined,
+        overlaps: null,
         dragged: {
             patch,
             filled: patch.filled,
@@ -122,21 +114,6 @@ export function dragStart(id: string, position: { x: number; y: number }, state:
             flipped: false,
             onBlanket: false,
             canBePlaced: true
-        }
-    };
-}
-
-export function drag(position: { x: number; y: number }, state: Game): Game {
-    if (!state.dragged) {
-        return state;
-    }
-
-    return {
-        ...state,
-        dragged: {
-            ...state.dragged,
-            x: position.x,
-            y: position.y
         }
     };
 }
@@ -204,49 +181,7 @@ export function place(state: Game): Game {
         return state;
     }
 
-    const cellSize = state.gameData.patchCellSize;
-    const newPlayerData = { ...state[state.currentPlayerId] };
-
-    if (state.dragged.patch.id === smallPatch.id) {
-        // prevent duplicate id
-        state.dragged.patch = { ...state.dragged.patch, id: '0__' + newPlayerData.patches.length };
-    }
-
-    newPlayerData.patches = [...newPlayerData.patches, state.dragged.patch];
-    newPlayerData.positions = [
-        ...newPlayerData.positions,
-        {
-            x: state.dragged.x - newPlayerData.blanketX,
-            y: state.dragged.y - newPlayerData.blanketY,
-            flipped: state.dragged.flipped,
-            angle: state.dragged.angle
-        }
-    ];
-
-    const posX = Math.round((state.dragged.x - newPlayerData.blanketX) / cellSize);
-    const posY = Math.round((state.dragged.y - newPlayerData.blanketY) / cellSize);
-
-    newPlayerData.filled = placeFill(newPlayerData.filled, state.dragged.filled, posX, posY);
-
-    addScoreAnimation(newPlayerData, -state.dragged.patch.price);
-    newPlayerData.buttons -= state.dragged.patch.price;
-    newPlayerData.income += state.dragged.patch.income;
-
-    const patchId = state.dragged.patch.id;
-    const newPatches = removeElement(state.patches, patchId);
-
-    let newSmallPatches = state.smallPatches;
-    if (patchId === smallPatch.id) {
-        newSmallPatches--;
-    }
-
-    let newState = {
-        ...state,
-        patches: newPatches,
-        dragged: null,
-        smallPatches: newSmallPatches,
-        [state.currentPlayerId]: newPlayerData
-    } as Game;
+    let newState = statePlace(state);
 
     newState = stateCheck7x7(newState);
 
@@ -264,7 +199,8 @@ export function skip(state: Game): Game {
 
     let newState = {
         ...state,
-        dragged: null
+        dragged: null,
+        overlaps: null
     } as Game;
 
     newState = movePlayer(newState, 0, oppositePlayer.time);

@@ -1,7 +1,7 @@
 export type Game = {
     gameData: GameData;
     patches: PatchData[];
-    overlaps?: { x: number; y: number; data: number[][] };
+    overlaps: null | { x: number; y: number; data: number[][] };
     patchPositions: PointData[];
     timeBoardData: TimeBoardDataItem[];
     dragged: DraggedData | null;
@@ -10,7 +10,7 @@ export type Game = {
     isSquare7x7Free: boolean;
     smallPatches: number;
     currentPlayerId: PlayerType;
-    winner?: PlayerType | 'both';
+    winner: null | PlayerType | 'both';
 };
 
 export type PlayerType = 'player1' | 'player2';

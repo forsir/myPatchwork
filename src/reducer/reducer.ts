@@ -1,6 +1,5 @@
 import {
     animationEnd,
-    drag,
     dragEnd,
     dragStart,
     flip,
@@ -21,9 +20,7 @@ export type Action =
           type: 'SET_PLAYER_SIZE';
           payload: { id: PlayerType; x: number; y: number; windowWidth: number; windowHeight: number };
       }
-    // | { type: 'MOVE_ITEM'; payload: { item: Item; point: Point } }
     | { type: 'DRAG_STARTED'; payload: { data: PatchData; position: { x: number; y: number } } }
-    | { type: 'DRAG'; payload: { data: PatchData; position: { x: number; y: number } } }
     | { type: 'DRAG_ENDED'; payload: { data: PatchData; position: { x: number; y: number; angle: number } } }
     | { type: 'ROTATE_LEFT' }
     | { type: 'ROTATE_RIGHT' }
@@ -51,11 +48,6 @@ export const reducer = (state: Game, action: Action): Game => {
         case 'DRAG_STARTED': {
             const { data, position } = action.payload;
             return dragStart(data.id, position, state);
-        }
-
-        case 'DRAG': {
-            const { data, position } = action.payload;
-            return drag(position, state);
         }
 
         case 'DRAG_ENDED': {

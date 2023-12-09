@@ -1,6 +1,15 @@
 import { smallPatch } from '../data/smallPatchData';
 import { DraggedData, Game } from './types';
-import { addScoreAnimation, check7x7, checkFill, computeEmptySpaces, getNextPlayer, patchSize } from './utils';
+import {
+    addScoreAnimation,
+    check7x7,
+    checkFill,
+    computeEmptySpaces,
+    getNextPlayer,
+    patchSize,
+    placeFill,
+    removeElement
+} from './utils';
 
 export function setCurrentPlayer(state: Game): Game {
     const newPlayer = getNextPlayer(
@@ -62,6 +71,56 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
     };
 }
 
+export function statePlace(state: Game): Game {
+    if (!state.dragged) {
+        return state;
+    }
+
+    const cellSize = state.gameData.patchCellSize;
+    const newPlayerData = { ...state[state.currentPlayerId] };
+
+    if (state.dragged.patch.id === smallPatch.id) {
+        // prevent duplicate id
+        state.dragged.patch = { ...state.dragged.patch, id: '0__' + newPlayerData.patches.length };
+    }
+
+    newPlayerData.patches = [...newPlayerData.patches, state.dragged.patch];
+    newPlayerData.positions = [
+        ...newPlayerData.positions,
+        {
+            x: state.dragged.x - newPlayerData.blanketX,
+            y: state.dragged.y - newPlayerData.blanketY,
+            flipped: state.dragged.flipped,
+            angle: state.dragged.angle
+        }
+    ];
+
+    const posX = Math.round((state.dragged.x - newPlayerData.blanketX) / cellSize);
+    const posY = Math.round((state.dragged.y - newPlayerData.blanketY) / cellSize);
+
+    newPlayerData.filled = placeFill(newPlayerData.filled, state.dragged.filled, posX, posY);
+
+    addScoreAnimation(newPlayerData, -state.dragged.patch.price);
+    newPlayerData.buttons -= state.dragged.patch.price;
+    newPlayerData.income += state.dragged.patch.income;
+
+    const patchId = state.dragged.patch.id;
+    const newPatches = removeElement(state.patches, patchId);
+
+    let newSmallPatches = state.smallPatches;
+    if (patchId === smallPatch.id) {
+        newSmallPatches--;
+    }
+
+    return {
+        ...state,
+        patches: newPatches,
+        dragged: null,
+        smallPatches: newSmallPatches,
+        [state.currentPlayerId]: newPlayerData
+    } as Game;
+}
+
 export function checkPatchPlace(
     state: Game,
     newData: { x: number; y: number; angle: number; flipped?: boolean; filled?: number[][] }
@@ -105,7 +164,7 @@ export function checkPatchPlace(
         canBePlaced = overlaps == null;
     }
 
-    let newOverlaps = undefined;
+    let newOverlaps = null;
     if (!canBePlaced) {
         const currentPlayer = state[state.currentPlayerId];
         newOverlaps = {

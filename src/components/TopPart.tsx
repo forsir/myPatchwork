@@ -22,7 +22,7 @@ export type TopPartProps = {
     player1: PlayerData;
     player2: PlayerData;
     currentPlayerId: PlayerType;
-    overlaps: { x: number; y: number; data: number[][] } | undefined;
+    overlaps: null | { x: number; y: number; data: number[][] };
     isSmallPatch: boolean;
     winner: boolean;
     dispatch: React.Dispatch<Action>;
@@ -51,7 +51,7 @@ export function TopPart({
                 overlapElement.push(
                     <div
                         key={`${rowIndex}_${columnIndex}`}
-                        className="absolute z-60"
+                        className="absolute pointer-events-none z-60"
                         style={{
                             top: overlaps.y + gameData.patchCellSize * rowIndex,
                             left: overlaps.x + gameData.patchCellSize * columnIndex,
@@ -59,8 +59,7 @@ export function TopPart({
                             height: `${gameData.patchCellSize}px`,
                             backgroundColor: 'red',
                             opacity: 0.5,
-                            zIndex: 60,
-                            pointerEvents: 'none'
+                            zIndex: 60
                         }}
                     ></div>
                 );

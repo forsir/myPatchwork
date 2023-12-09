@@ -10,14 +10,13 @@ export function Blanket({ positions, cellSize }: BlanketProps) {
         <></>
     ) : (
         <div
-            className="absolute"
+            className="absolute pointer-events-none"
             style={{
                 top: `${positions[0].y - cellSize / 2}px`,
                 left: `${positions[0].x - cellSize / 2}px`,
                 width: `${positions[2].x - positions[0].x + cellSize * 4}px`,
                 height: `${cellSize * 5}px`,
-                backgroundColor: 'rgb(255, 196, 58, 0.5)',
-                pointerEvents: 'none'
+                backgroundColor: 'rgb(255, 196, 58, 0.5)'
             }}
         ></div>
     );

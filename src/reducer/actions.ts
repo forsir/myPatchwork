@@ -9,7 +9,8 @@ import { Game, PlayerData, PlayerType } from './types';
 import {
     addScoreAnimation,
     check7x7,
-    flipMatrix,
+    flipMatrixHorizontal,
+    flipMatrixVertical,
     placeFill,
     removeElement,
     rotateMatrixLeft,
@@ -206,7 +207,10 @@ export function flip(state: Game): Game {
         y: state.dragged.y,
         angle: state.dragged.angle,
         flipped: !state.dragged.flipped,
-        filled: flipMatrix(state.dragged.filled)
+        filled:
+            state.dragged.angle % 180 === 0
+                ? flipMatrixHorizontal(state.dragged.filled)
+                : flipMatrixVertical(state.dragged.filled)
     });
 }
 

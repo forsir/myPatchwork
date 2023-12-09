@@ -20,8 +20,12 @@ export function rotateMatrixRight(matrix: number[][]): number[][] {
     );
 }
 
-export const flipMatrix = (matrix: number[][]) => {
+export const flipMatrixHorizontal = (matrix: number[][]) => {
     return matrix.map((row) => reverse(row));
+};
+
+export const flipMatrixVertical = (matrix: number[][]) => {
+    return reverse(matrix);
 };
 
 export function removeElement(patches: PatchData[], id: string | undefined) {

@@ -6,7 +6,9 @@ export type BlanketProps = {
 };
 
 export function Blanket({ positions, cellSize }: BlanketProps) {
-    return (
+    return positions.length === 0 ? (
+        <></>
+    ) : (
         <div
             className="absolute"
             style={{

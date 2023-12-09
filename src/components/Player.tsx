@@ -51,6 +51,7 @@ export function Player({ playerId, playerData, currentPlayerId, size, colors, di
             position={playerData.positions[i]}
             tagBorder={0}
             cellSize={size}
+            isSmall={false}
         />
     ));
 

@@ -91,6 +91,7 @@ export function TopPart({
                         cellSize={gameData.patchCellSize}
                         playersButtons={currentPlayer.buttons}
                         tagBorder={player1.blanketY}
+                        isSmall={isSmallPatch}
                         dispatch={dispatch}
                     />
                 );
@@ -111,6 +112,7 @@ export function TopPart({
                     playersButtons={currentPlayer.buttons}
                     tagBorder={player1.blanketY}
                     dispatch={dispatch}
+                    isSmall={false}
                 />
             ) : undefined}
             {overlapElement}

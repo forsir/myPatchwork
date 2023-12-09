@@ -16,6 +16,7 @@ export type PatchProps = {
     cellSize: number;
     playersButtons?: number;
     tagBorder: number;
+    isSmall: boolean;
     dispatch: React.Dispatch<Action> | null;
 };
 
@@ -29,6 +30,7 @@ export function Patch({
     cellSize,
     playersButtons: playerButtons,
     tagBorder,
+    isSmall,
     dispatch
 }: PatchProps) {
     const controls = useAnimation();
@@ -61,7 +63,7 @@ export function Patch({
 
     // isPlaced = true;
 
-    const cannotUse = drag && (playerButtons ?? 0) < data.price;
+    const cannotUse = isSmall || (drag && (playerButtons ?? 0) < data.price);
 
     const buttons: any[] = [];
     const scale = 0.7;
@@ -135,12 +137,6 @@ export function Patch({
                     zIndex: isDragged ? 60 : isPlaced ? 20 : 40
                 }}
                 onDragStart={() => dispatch?.({ type: 'DRAG_STARTED', payload: { data, position } })}
-                // onDrag={(_, info) =>
-                //     dispatch?.({
-                //         type: 'DRAG',
-                //         payload: { data, position: { x: info.point.x, y: info.point.y } }
-                //     })
-                // }
                 onDragEnd={(_, info) => {
                     dispatch?.({
                         type: 'DRAG_ENDED',

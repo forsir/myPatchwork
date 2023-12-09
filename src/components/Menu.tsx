@@ -6,10 +6,11 @@ import { DraggedData } from '../reducer/types';
 export type MenuProps = {
     draggedData: DraggedData | null;
     isSmallPatch: boolean;
+    isWinner: boolean;
     dispatch: React.Dispatch<Action>;
 };
 
-export function Menu({ draggedData, isSmallPatch, dispatch }: MenuProps) {
+export function Menu({ draggedData, isSmallPatch, isWinner, dispatch }: MenuProps) {
     return (
         <div>
             <div className="flex flex-row">
@@ -45,7 +46,7 @@ export function Menu({ draggedData, isSmallPatch, dispatch }: MenuProps) {
             <button
                 className="w-full px-4 py-2 m-1 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
                 onClick={() => dispatch({ type: 'SKIP' })}
-                disabled={isSmallPatch}
+                disabled={isSmallPatch || isWinner}
             >
                 Vynechat tah
             </button>

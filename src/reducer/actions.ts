@@ -70,7 +70,7 @@ export function setPlayerSize(
 
     const centerX = windowWidth / 2;
     const centerY = windowHeight / 4;
-    const a = windowWidth / 3;
+    const a = windowWidth / 2.5;
     const b = windowHeight / 4;
     const positions = createEllipse(centerX - state.gameData.patchCellSize * 1.5, centerY, a, b, patchesData.length);
 

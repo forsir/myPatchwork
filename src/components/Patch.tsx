@@ -94,7 +94,8 @@ export function Patch({
                     className="absolute z-50 text-xs border border-black bottom-1 bg-slate-100"
                     animate={{
                         x: position.x,
-                        y: Math.min(tagBorder, position.y)
+                        y: Math.min(tagBorder, position.y),
+                        opacity: isSmall ? 0.5 : 1
                     }}
                     transition={{
                         duration: 0.5

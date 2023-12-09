@@ -10,6 +10,7 @@ export type BottomPartProps = {
     menuData: DraggedData | null;
     gameData: GameData;
     isSmallPatch: boolean;
+    isWinner: boolean;
     dispatch: React.Dispatch<Action>;
 };
 
@@ -20,6 +21,7 @@ export function BottomPart({
     menuData,
     gameData,
     isSmallPatch,
+    isWinner,
     dispatch
 }: BottomPartProps) {
     return (
@@ -32,7 +34,7 @@ export function BottomPart({
                 colors={gameData.colors}
                 dispatch={dispatch}
             />
-            <Menu draggedData={menuData} isSmallPatch={isSmallPatch} dispatch={dispatch} />
+            <Menu draggedData={menuData} isSmallPatch={isSmallPatch} isWinner={isWinner} dispatch={dispatch} />
             <Player
                 currentPlayerId={currentPlayerId}
                 playerData={player2}

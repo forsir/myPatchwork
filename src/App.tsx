@@ -43,6 +43,7 @@ export default function App() {
                 menuData={state.dragged}
                 gameData={state.gameData}
                 isSmallPatch={state.smallPatches > 0}
+                isWinner={!!state.winner}
                 currentPlayerId={state.currentPlayerId}
             />
         </div>

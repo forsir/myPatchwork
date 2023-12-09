@@ -3,6 +3,7 @@ import { smallPatch } from '../data/smallPatchData';
 import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
+import { initial } from './initial';
 import { checkPatchPlace, checkWinner, movePlayer, setCurrentPlayer } from './stateActions';
 import { Game, PlayerData, PlayerType } from './types';
 import { addScoreAnimation, flipMatrix, placeFill, removeElement, rotateMatrixLeft, rotateMatrixRight } from './utils';
@@ -24,6 +25,34 @@ export function init(x: number, y: number, a: number, b: number, state: Game): G
     };
 }
 
+export function newGame(state: Game): Game {
+    const player1Data = {
+        ...initial.player1,
+        blanketX: state.player1.blanketX,
+        blanketY: state.player1.blanketY,
+        blanketSize: state.gameData.patchCellSize * 9
+    } as PlayerData;
+
+    const player2Data = {
+        ...initial.player2,
+        blanketX: state.player2.blanketX,
+        blanketY: state.player2.blanketY,
+        blanketSize: state.gameData.patchCellSize * 9
+    } as PlayerData;
+
+    return {
+        ...state,
+        currentPlayerId: 'player1',
+        dragged: null,
+        patches: randomlyPatches(patchesData),
+        player1: player1Data,
+        player2: player2Data,
+        smallPatches: 0,
+        timeBoardData: timeBoardData.map((d) => ({ ...d })),
+        winner: undefined
+    };
+}
+
 export function setPlayerSize(
     id: PlayerType,
     x: number,
@@ -41,7 +70,7 @@ export function setPlayerSize(
 
     const centerX = windowWidth / 2;
     const centerY = windowHeight / 4;
-    const a = windowWidth / 2;
+    const a = windowWidth / 3;
     const b = windowHeight / 4;
     const positions = createEllipse(centerX - state.gameData.patchCellSize * 1.5, centerY, a, b, patchesData.length);
 

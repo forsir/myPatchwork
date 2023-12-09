@@ -89,7 +89,7 @@ export function Patch({
         <div className="relative">
             {!isPlaced ? (
                 <motion.div
-                    className="absolute z-50 p-1 text-sm border border-black bottom-1 bg-slate-100"
+                    className="absolute z-50 text-xs border border-black bottom-1 bg-slate-100"
                     animate={{
                         x: position.x,
                         y: Math.min(tagBorder, position.y)
@@ -98,12 +98,10 @@ export function Patch({
                         duration: 0.5
                     }}
                 >
-                    <div>
-                        <FontAwesomeIcon icon={faHourglass} className="text-xs" /> {data.time}
-                    </div>
-                    <div>
-                        <FontAwesomeIcon icon={faCircleDot} className="text-xs" /> {data.price}
-                    </div>
+                    <FontAwesomeIcon icon={faHourglass} className="pl-1" style={{ fontSize: 'O.2rem' }} />
+                    <span className="pl-1">{data.time}</span>
+                    <FontAwesomeIcon icon={faCircleDot} className="pl-1" style={{ fontSize: 'O.2rem' }} />
+                    <span className="pl-1 pr-1">{data.price}</span>
                 </motion.div>
             ) : (
                 ''

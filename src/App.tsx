@@ -30,6 +30,7 @@ export default function App() {
                 currentPlayerId={state.currentPlayerId}
                 overlaps={state.overlaps}
                 isSmallPatch={state.smallPatches > 0}
+                winner={!!state.winner}
                 dispatch={dispatch}
             />
             <BottomPart

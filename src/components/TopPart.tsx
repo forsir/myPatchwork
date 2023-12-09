@@ -9,6 +9,7 @@ import {
     PointData,
     TimeBoardDataItem
 } from '../reducer/types';
+import { Blanket } from './Blanket';
 import { Patch } from './Patch';
 import { TimeBoard } from './TimeBoard';
 
@@ -23,6 +24,7 @@ export type TopPartProps = {
     currentPlayerId: PlayerType;
     overlaps: { x: number; y: number; data: number[][] } | undefined;
     isSmallPatch: boolean;
+    winner: boolean;
     dispatch: React.Dispatch<Action>;
 };
 
@@ -37,6 +39,7 @@ export function TopPart({
     currentPlayerId,
     overlaps,
     isSmallPatch,
+    winner,
     dispatch
 }: TopPartProps) {
     const currentPlayer = currentPlayerId === 'player1' ? player1 : player2;
@@ -74,12 +77,13 @@ export function TopPart({
                 player2={player2}
                 timeBoardData={timeBoardData}
             />
+            {!winner ? <Blanket positions={patchPositions.slice(0, 3)} cellSize={gameData.patchCellSize} /> : undefined}
             {patches.map((patch, i) => {
                 return (
                     <Patch
                         key={patch.id}
                         data={patch}
-                        drag={i < 3 && !isSmallPatch}
+                        drag={!winner && i < 3 && !isSmallPatch}
                         isPlaced={false}
                         isDragged={draggedData?.isDragging ?? false}
                         position={draggedData?.patch.id === patch.id ? draggedData : patchPositions[i]}

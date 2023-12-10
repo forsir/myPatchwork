@@ -166,7 +166,7 @@ export function rotateRight(state: Game): Game {
     });
 }
 
-export function flip(state: Game): Game {
+export function flipPatch(state: Game): Game {
     if (!state.dragged) {
         return state;
     }

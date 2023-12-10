@@ -1,7 +1,7 @@
 import {
     dragEnd,
     dragStart,
-    flip,
+    flipPatch,
     initGame,
     newGame,
     placePatch,
@@ -64,7 +64,7 @@ export const reducer = (state: Game, action: Action): Game => {
         }
 
         case 'FLIP_PATCH': {
-            return flip(state);
+            return flipPatch(state);
         }
 
         case 'PLACE_PATCH': {

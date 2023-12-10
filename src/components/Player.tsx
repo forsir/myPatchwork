@@ -25,7 +25,7 @@ export function Player({ playerId, playerData, currentPlayerId, size: cellSize, 
         if (rect) {
             dispatch({
                 type: 'SET_PLAYER_SIZE',
-                payload: { id: playerId, x: rect.left, y: rect.top, windowWidth, windowHeight }
+                payload: { playerId: playerId, x: rect.left, y: rect.top, windowWidth, windowHeight }
             });
         }
     }, [windowWidth, windowHeight, reference]);

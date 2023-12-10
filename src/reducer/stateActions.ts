@@ -3,11 +3,11 @@ import { DraggedData, Game } from './types';
 import {
     addScoreAnimation,
     check7x7,
-    checkFill,
+    checkPatchToPlayerFill,
     computeEmptySpaces,
     getNextPlayer,
     patchSize,
-    placeFill,
+    placePatchToFill,
     removeElement
 } from './utils';
 
@@ -71,7 +71,7 @@ export function movePlayer(state: Game, incomeTime: number, toTime: number): Gam
     };
 }
 
-export function statePlace(state: Game): Game {
+export function statePlacePatch(state: Game): Game {
     if (!state.dragged) {
         return state;
     }
@@ -98,7 +98,7 @@ export function statePlace(state: Game): Game {
     const posX = Math.round((state.dragged.x - newPlayerData.blanketX) / cellSize);
     const posY = Math.round((state.dragged.y - newPlayerData.blanketY) / cellSize);
 
-    newPlayerData.filled = placeFill(newPlayerData.filled, state.dragged.filled, posX, posY);
+    newPlayerData.filled = placePatchToFill(newPlayerData.filled, state.dragged.filled, posX, posY);
 
     addScoreAnimation(newPlayerData, -state.dragged.patch.price);
     newPlayerData.buttons -= state.dragged.patch.price;
@@ -160,7 +160,7 @@ export function checkPatchPlace(
 
         const posX = Math.round((x - player.blanketX) / cellSize);
         const posY = Math.round((y - player.blanketY) / cellSize);
-        overlaps = checkFill(player.filled, newFilled, posX, posY);
+        overlaps = checkPatchToPlayerFill(player.filled, newFilled, posX, posY);
         canBePlaced = overlaps == null;
     }
 

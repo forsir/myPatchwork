@@ -24,7 +24,7 @@ export function Menu({ draggedData, isSmallPatch, isWinner, dispatch }: MenuProp
                 <button
                     className="flex-1 px-4 py-2 mr-2 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
                     disabled={!draggedData || isSmallPatch}
-                    onClick={() => dispatch({ type: 'FLIP' })}
+                    onClick={() => dispatch({ type: 'FLIP_PATCH' })}
                 >
                     <FontAwesomeIcon icon={faRepeat} />
                 </button>
@@ -38,14 +38,14 @@ export function Menu({ draggedData, isSmallPatch, isWinner, dispatch }: MenuProp
             </div>
             <button
                 className="w-full px-4 py-2 mt-2 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
-                onClick={() => dispatch({ type: 'PLACE' })}
+                onClick={() => dispatch({ type: 'PLACE_PATCH' })}
                 disabled={!draggedData?.onBlanket || !draggedData?.canBePlaced}
             >
                 {isSmallPatch ? 'Umístit látku' : 'Koupit látku'}
             </button>
             <button
                 className="w-full px-4 py-2 mt-2 font-bold text-center text-black bg-blue-500 border-2 border-blue-700 rounded-lg cursor-pointer disabled:opacity-50"
-                onClick={() => dispatch({ type: 'SKIP' })}
+                onClick={() => dispatch({ type: 'SKIP_MOVE' })}
                 disabled={isSmallPatch || isWinner}
             >
                 Vynechat tah

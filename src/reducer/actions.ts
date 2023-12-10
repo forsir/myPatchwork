@@ -4,11 +4,18 @@ import { timeBoardData } from '../data/timeBoardData';
 import { createEllipse } from '../hooks/createEllipse';
 import { randomlyPatches } from '../hooks/randomlyPatches';
 import { initial } from './initial';
-import { checkPatchPlace, checkWinner, movePlayer, setCurrentPlayer, stateCheck7x7, statePlace } from './stateActions';
+import {
+    checkPatchPlace,
+    checkWinner,
+    movePlayer,
+    setCurrentPlayer,
+    stateCheck7x7,
+    statePlacePatch
+} from './stateActions';
 import { Game, PlayerData, PlayerType } from './types';
 import { flipMatrixHorizontal, flipMatrixVertical, rotateMatrixLeft, rotateMatrixRight } from './utils';
 
-export function init(x: number, y: number, a: number, b: number, state: Game): Game {
+export function initGame(x: number, y: number, a: number, b: number, state: Game): Game {
     const patches = randomlyPatches(patchesData);
     const positions = createEllipse(x - state.gameData.patchCellSize * 1.5, y, a, b, patches.length);
     const timeBoardDataItems = timeBoardData.map((d) => ({ ...d }));
@@ -55,7 +62,7 @@ export function newGame(state: Game): Game {
 }
 
 export function setPlayerSize(
-    id: PlayerType,
+    playerId: PlayerType,
     x: number,
     y: number,
     windowWidth: number,
@@ -63,7 +70,7 @@ export function setPlayerSize(
     state: Game
 ): Game {
     const playerData = {
-        ...state[id],
+        ...state[playerId],
         blanketX: Math.round(x),
         blanketY: Math.round(y),
         blanketSize: state.gameData.patchCellSize * 9
@@ -82,17 +89,17 @@ export function setPlayerSize(
             centerX: centerX,
             centerY: centerY
         },
-        [id]: playerData,
+        [playerId]: playerData,
         patchPositions: positions
     };
 }
 
-export function dragStart(id: string, position: { x: number; y: number }, state: Game): Game {
-    if (state.dragged?.patch.id === id) {
+export function dragStart(patchId: string, position: { x: number; y: number }, state: Game): Game {
+    if (state.dragged?.patch.id === patchId) {
         return { ...state, overlaps: null };
     }
 
-    let patch = state.patches.find((p) => p.id === id);
+    let patch = state.patches.find((p) => p.id === patchId);
     if (!patch) {
         if (state.smallPatches > 0) {
             patch = smallPatch;
@@ -118,8 +125,8 @@ export function dragStart(id: string, position: { x: number; y: number }, state:
     };
 }
 
-export function dragEnd(id: string, position: { x: number; y: number; angle: number }, state: Game): Game {
-    if (state.dragged?.patch.id !== id) {
+export function dragEnd(patchId: string, position: { x: number; y: number; angle: number }, state: Game): Game {
+    if (state.dragged?.patch.id !== patchId) {
         return state;
     }
 
@@ -176,12 +183,12 @@ export function flip(state: Game): Game {
     });
 }
 
-export function place(state: Game): Game {
+export function placePatch(state: Game): Game {
     if (!state.dragged) {
         return state;
     }
 
-    let newState = statePlace(state);
+    let newState = statePlacePatch(state);
 
     newState = stateCheck7x7(newState);
 
@@ -194,7 +201,7 @@ export function place(state: Game): Game {
     return newState;
 }
 
-export function skip(state: Game): Game {
+export function skipMove(state: Game): Game {
     const oppositePlayer = state.currentPlayerId === 'player1' ? state.player2 : state.player1;
 
     let newState = {
@@ -212,7 +219,7 @@ export function skip(state: Game): Game {
     return newState;
 }
 
-export function animationEnd(state: Game, player: PlayerType, value: number): Game {
+export function scoreAnimationEnd(state: Game, player: PlayerType, value: number): Game {
     const newButtonAnimation = [...(state[player].buttonsAnimation ?? [])];
     const index = newButtonAnimation.indexOf(value);
     newButtonAnimation.splice(index, 1);

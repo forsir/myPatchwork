@@ -28,12 +28,15 @@ export function Patch({
     isPlaced,
     isDragged,
     cellSize,
-    playersButtons: playerButtons,
+    playersButtons,
     tagBorder,
     isSmall,
     dispatch
 }: PatchProps) {
     const controls = useAnimation();
+
+    const cannotUse = isSmall || (drag && (playersButtons ?? 0) < data.price);
+
     useEffect(() => {
         let xt = 0;
         let yt = 0;
@@ -50,18 +53,22 @@ export function Patch({
                 rotate: -position.angle,
                 rotateY: position.flipped ? 180 : 0
             });
+            controls.start({
+                opacity: 1,
+                filter: 'grayscale(0)'
+            });
         } else {
             controls.start({
                 x: position.x - xt,
                 y: position.y - yt,
                 rotate: -position.angle,
                 rotateY: position.flipped ? 180 : 0,
-                transition: onBlanket ? { duration: 0.1 } : { duration: 0.5 }
+                transition: onBlanket ? { duration: 0.1 } : { duration: 0.5 },
+                opacity: cannotUse ? 0.5 : 1,
+                filter: cannotUse ? 'grayscale(1)' : 'grayscale(0)'
             });
         }
-    }, [position, isPlaced, cellSize, data.height, data.width, onBlanket, controls]);
-
-    const cannotUse = isSmall || (drag && (playerButtons ?? 0) < data.price);
+    }, [position, isPlaced, cellSize, data.height, data.width, onBlanket, controls, cannotUse]);
 
     const buttons: any[] = [];
     const scale = 0.7;
@@ -152,7 +159,7 @@ export function Patch({
             >
                 <motion.path
                     d={data.svg}
-                    fill={cannotUse ? 'rgba(128, 128, 128, 0.5)' : data.color}
+                    fill={data.color}
                     transition={{ duration: 1 }}
                     strokeWidth="0.5px"
                     stroke="#606060"

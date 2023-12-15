@@ -1,7 +1,8 @@
-import { faCircleDot, faHourglass } from '@fortawesome/free-solid-svg-icons';
+import { faHourglass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
+import { buttonIconData } from '../data/buttonSvgData';
 import { Action } from '../reducer/reducer';
 import { PatchData, PointData } from '../reducer/types';
 import { patchSize } from '../reducer/utils';
@@ -96,7 +97,7 @@ export function Patch({
         <div className="relative">
             {!isPlaced ? (
                 <motion.div
-                    className="absolute z-50 text-xs border border-black bottom-1 bg-slate-100"
+                    className="absolute z-50 text-sm border pointer-events-none border-black rounded-r-sm shadow-[2.5px_2.5px_2.5px_0px_#718096] rounded-l-md bottom-1 bg-amber-200 "
                     animate={{
                         x: position.x,
                         y: Math.min(tagBorder, position.y),
@@ -106,10 +107,22 @@ export function Patch({
                         duration: 0.5
                     }}
                 >
-                    <FontAwesomeIcon icon={faHourglass} className="pl-1" style={{ fontSize: 'O.2rem' }} />
-                    <span className="pl-1">{data.time}</span>
-                    <FontAwesomeIcon icon={faCircleDot} className="pl-1" style={{ fontSize: 'O.2rem' }} />
-                    <span className="pl-1 pr-1">{data.price}</span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 5 5"
+                        className="inline-block pl-1 mb-1 text-blue-800"
+                        style={{
+                            height: '1em',
+                            lineHeight: '1em'
+                        }}
+                    >
+                        <path d={buttonIconData} fill="rgb(30 64 175)" />
+                    </svg>
+                    <span className="pl-1 pr-1 font-semibold text-blue-800">{data.price}</span>
+                    <span className="text-amber-950">
+                        <FontAwesomeIcon icon={faHourglass} className="pl-1" style={{ fontSize: 'O.2rem' }} />
+                        <span className="pl-1 pr-1">{data.time}</span>
+                    </span>
                 </motion.div>
             ) : (
                 ''

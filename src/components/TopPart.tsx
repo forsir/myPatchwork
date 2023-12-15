@@ -104,7 +104,7 @@ export function TopPart({
                     position={
                         draggedData?.patch.id === smallPatch.id
                             ? draggedData
-                            : { x: gameData.centerX, y: gameData.centerY, angle: 0 }
+                            : { x: gameData.centerX, y: gameData.centerY + gameData.timeCellSize * 4, angle: 0 }
                     }
                     onBlanket={draggedData?.patch.id === smallPatch.id ? draggedData.onBlanket : false}
                     cellSize={gameData.patchCellSize}

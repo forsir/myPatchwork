@@ -18,7 +18,7 @@ export default function App() {
     }, []);
 
     return (
-        <div ref={main} className="relative w-screen h-screen overflow-hidden bg-orange-200">
+        <div ref={main} className="relative w-screen h-screen overflow-hidden bg-amber-50">
             {state.winner ? (
                 <Winner player1={state.player1} player2={state.player2} winner={state.winner} dispatch={dispatch} />
             ) : undefined}

@@ -1,7 +1,6 @@
-import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { buttonIconData } from '../data/buttonSvgData';
 import { Action } from '../reducer/reducer';
 import { PlayerType } from '../reducer/types';
 
@@ -41,7 +40,17 @@ export function PlayerHead({ playerName, buttons, buttonsAnimation, size, player
     return (
         <div className="absolute z-10 text-center bottom-full" style={{ width: `${size * 9}px` }}>
             <span className="font-semibold">{playerName}</span>{' '}
-            <FontAwesomeIcon icon={faCircleDot} className="text-xs opacity-50" />
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 5 5"
+                className="inline-block pl-1 mb-1 text-blue-800"
+                style={{
+                    height: '1em',
+                    lineHeight: '1em'
+                }}
+            >
+                <path d={buttonIconData} fill="rgb(30 64 175)" />
+            </svg>
             <span className="relative">
                 <motion.span className="absolute left-1" animate={controlOriginal}>
                     {oldButtons}

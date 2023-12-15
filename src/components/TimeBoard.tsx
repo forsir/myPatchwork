@@ -25,7 +25,8 @@ export const TimeBoard = ({ gameData, timeBoardData, player1, player2, currentPl
             className="absolute"
             style={{
                 left: `${gameData.centerX - gameData.timeCellSize * 4}px`,
-                top: `${gameData.centerY - gameData.timeCellSize * 4}px`
+                top: `${gameData.centerY - gameData.timeCellSize * 4}px`,
+                transform: `perspective(${gameData.timeCellSize * 8}px) rotateX(25deg)`
             }}
         >
             <div className="relative grid grid-cols-8 aspect-square grid-rows-8">

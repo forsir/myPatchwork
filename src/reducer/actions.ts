@@ -138,13 +138,11 @@ export function rotateLeft(state: Game): Game {
         return state;
     }
 
-    const x = state.dragged.x;
-    const y = state.dragged.y;
-
     return checkPatchPlace(state, {
-        x: x,
-        y: y,
+        x: state.dragged.x,
+        y: state.dragged.y,
         angle: state.dragged.angle + 90,
+        flipped: state.dragged.flipped ?? false,
         filled: rotateMatrixLeft(state.dragged.filled)
     });
 }
@@ -154,12 +152,9 @@ export function rotateRight(state: Game): Game {
         return state;
     }
 
-    const x = state.dragged.x;
-    const y = state.dragged.y;
-
     return checkPatchPlace(state, {
-        x: x,
-        y: y,
+        x: state.dragged.x,
+        y: state.dragged.y,
         angle: state.dragged.angle - 90,
         flipped: state.dragged.flipped ?? false,
         filled: rotateMatrixRight(state.dragged.filled)
